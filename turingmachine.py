@@ -2,30 +2,36 @@ import json
 
 
 class TuringMachine(object):
-    def __init__(self, instructions, tape, end_state, current_state):
+    def __init__(self, instructions, tape, end_state, start_state):
         self.instructions = instructions
         self.tape = tape
         self.end_state = end_state
-        self.current_state = current_state
+        self.state = start_state
 
-    def cycle(self):
+    def validate_instruction(self):
+        try:
+            pass
+        except Exception as e:
+            print("The configuration you passed, contains invalid states")
+
+    def run(self):
+        self.validate_instruction()
         i = 0
-        while self.current_state != self.end_state:
+        while self.state != self.end_state:
             if i < len(self.tape):
-                current_cell = self.tape[i]
+                cell = self.tape[i]
             else:
-                current_cell = "B"
+                cell = "B"
                 self.tape.append("B")
-            self.tape[i] = instructions[self.current_state][current_cell]["write"]
-            i += instructions[self.current_state][current_cell]["move"]
-            self.current_state = instructions[self.current_state][current_cell]["nextState"]
+            self.tape[i] = self.instructions[self.state][cell]["write"]
+            i += self.instructions[self.state][cell]["move"]
+            self.state = self.instructions[self.state][cell]["nextState"]
         return self.tape
 
 
 if __name__ == '__main__':
     try:
         instructions = json.loads(open('instructions.json').read())
-        print(TuringMachine(instructions, list("111"), "q5", "q0").cycle())
+        TuringMachine(instructions, list("111"), "q5", "q0").run()
     except Exception as e:
         print("Looks like the .json-File is invalid!")
-
