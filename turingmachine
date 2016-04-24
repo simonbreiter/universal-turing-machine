@@ -7,15 +7,16 @@ import os
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Implementation of an universal Turing Machine.')
-    requiredArguments = parser.add_argument_group('required arguments')
-    requiredArguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
-    requiredArguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
+    parser = argparse.ArgumentParser(description='Implementation of a universal Turing Machine.')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
     parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
-    requiredArguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
-    args = parser.parse_args()
-    return args
+
+    required_arguments = parser.add_argument_group('required arguments')
+    required_arguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
+    required_arguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
+    required_arguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
+
+    return parser.parse_args()
 
 
 class TuringMachine(object):
@@ -26,17 +27,18 @@ class TuringMachine(object):
         self.end_state = end_state
         self.render = render
 
-    def renderScreen(self, index):
+    def render_screen(self, index):
         os.system('clear')
         print(str.join('', self.tape))
         print('^'.rjust(index, ' '))
         time.sleep(1)
 
     def validate_instruction(self):
-        try:
-            pass
-        except Exception as e:
-            print("The configuration you passed, contains invalid states")
+        for instruction in self.instructions:
+            for case in self.instructions[instruction]:
+                state_to_check = self.instructions[instruction][case]['nextState']
+                if state_to_check not in self.instructions and state_to_check != self.end_state:
+                    raise Exception("Invalid configuration, missing states")
 
     def run(self):
         self.validate_instruction()
@@ -50,18 +52,18 @@ class TuringMachine(object):
             self.tape[index] = self.instructions[self.state][cell]["write"]
             index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
-            if(self.render):
-                self.renderScreen(index)
+            if self.render:
+                self.render_screen(index)
         return str.join('', self.tape)
 
 
 def main():
     args = parse_arguments()
-    instructions = json.loads(open(args.instructions).read())
     try:
+        instructions = json.loads(open(args.instructions).read())
         print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render).run()))
     except Exception as e:
-        print("Looks like the .json-File is invalid!")
+        print("Looks like something went wrong! - %s" % e.message)
 
 
 if __name__ == '__main__':
