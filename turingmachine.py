@@ -1,5 +1,7 @@
 import json
 import argparse
+import time
+import os
 
 
 def parse_arguments():
@@ -8,17 +10,25 @@ def parse_arguments():
     requiredArguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
     requiredArguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
+    parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
     requiredArguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
     args = parser.parse_args()
     return args
 
 
 class TuringMachine(object):
-    def __init__(self, instructions, tape, start_state, end_state):
+    def __init__(self, instructions, tape, start_state, end_state, render):
         self.instructions = instructions
         self.tape = list(tape)
         self.state = start_state
         self.end_state = end_state
+        self.render = render
+
+    def renderScreen(self, index):
+        os.system('clear')
+        print(str.join('', self.tape))
+        print(''.ljust(index - 1, ' ') + '^')
+        time.sleep(1)
 
     def validate_instruction(self):
         try:
@@ -38,6 +48,8 @@ class TuringMachine(object):
             self.tape[index] = self.instructions[self.state][cell]["write"]
             index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
+            if(self.render):
+                self.renderScreen(index)
         return str.join('', self.tape)
 
 
@@ -45,7 +57,7 @@ def main():
     args = parse_arguments()
     instructions = json.loads(open(args.instructions).read())
     try:
-        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end).run()))
+        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render).run()))
     except Exception as e:
         print("Looks like the .json-File is invalid!")
 
