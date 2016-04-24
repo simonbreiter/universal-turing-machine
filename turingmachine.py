@@ -4,10 +4,11 @@ import argparse
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Implementation of an universal Turing Machine.')
-    parser.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
-    parser.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
+    requiredArguments = parser.add_argument_group('required arguments')
+    requiredArguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
+    requiredArguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
-    parser.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
+    requiredArguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
     args = parser.parse_args()
     return args
 
