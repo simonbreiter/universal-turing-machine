@@ -31,7 +31,7 @@ class TuringMachine(object):
         os.system('clear')
         print(str.join('', self.tape))
         print('^'.rjust(index, ' '))
-        time.sleep(1)
+        time.sleep(.3)
 
     def validate_instruction(self):
         for instruction in self.instructions:
