@@ -10,7 +10,7 @@ The machine reads a JSON file as instruction and process the input accordingly.
 CLI Example:
 ```
 #!bash
-python3 turingmachine.py --instructions instructions.json --input 111 --initial q0 --end q5
+./turingmachine --instructions instructions.json --input 111 --initial q0 --end q5
 ```
 
 ## Author(s)
