@@ -2,9 +2,16 @@
 
 Implementation of an universal turing machine in python.
 
-## Getting Started
+![](/turing.png)
 
+## Usage
+The machine reads a JSON file as instruction and process the input accordingly.
 
+CLI Example:
+```
+#!bash
+./turingmachine --instructions instructions.json --input 111 --initial q0 --end q5
+```
 
 ## Author(s)
 
