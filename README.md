@@ -2,6 +2,8 @@
 
 Implementation of an universal turing machine in python.
 
+![](/turing.svg)
+
 ## Usage
 The machine reads a JSON file as instruction and process the input accordingly.
 
