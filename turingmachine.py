@@ -28,15 +28,15 @@ class TuringMachine(object):
 
     def run(self):
         self.validate_instruction()
-        i = 0
+        index = 0
         while self.state != self.end_state:
-            if i < len(self.tape):
-                cell = self.tape[i]
+            if index < len(self.tape):
+                cell = self.tape[index]
             else:
                 cell = "B"
                 self.tape.append("B")
-            self.tape[i] = self.instructions[self.state][cell]["write"]
-            i += self.instructions[self.state][cell]["move"]
+            self.tape[index] = self.instructions[self.state][cell]["write"]
+            index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
         return str.join('', self.tape)
 
