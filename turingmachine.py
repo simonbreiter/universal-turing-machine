@@ -9,10 +9,11 @@ class TuringMachine(object):
         self.state = start_state
 
     def validate_instruction(self):
-        try:
-            pass
-        except Exception as e:
-            print("The configuration you passed, contains invalid states")
+        for instruction in instructions:
+            for case in instructions[instruction]:
+                state_to_check = instructions[instruction][case]['nextState']
+                if state_to_check not in instructions and state_to_check != self.end_state:
+                    raise Exception("Invalid configuration, missing states")
 
     def run(self):
         self.validate_instruction()
@@ -32,6 +33,6 @@ class TuringMachine(object):
 if __name__ == '__main__':
     try:
         instructions = json.loads(open('instructions.json').read())
-        TuringMachine(instructions, list("111"), "q5", "q0").run()
+        print(TuringMachine(instructions, list("111"), "q5", "q0").run())
     except Exception as e:
-        print("Looks like the .json-File is invalid!")
+        print("Looks like something went wrong! - %s" % e.message)
