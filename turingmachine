@@ -29,7 +29,7 @@ class TuringMachine(object):
     def renderScreen(self, index):
         os.system('clear')
         print(str.join('', self.tape))
-        print(''.ljust(index - 1, ' ') + '^')
+        print('^'.rjust(index, ' '))
         time.sleep(1)
 
     def validate_instruction(self):
