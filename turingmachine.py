@@ -1,10 +1,21 @@
 import json
+import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Implementation of an universal Turing Machine.')
+    parser.add_argument('-i', '--instructions', type=str, action="store", default=False, help='Instructions, as JSON file')
+    parser.add_argument('-t', '--input', type=str, action="store", default=False, help='Input tape')
+    parser.add_argument('-b', '--initial', type=str, action="store", default=False, help='Initial state to begin')
+    parser.add_argument('-e', '--end', type=str, action="store", default=False, help='End state')
+    args = parser.parse_args()
+    return args
 
 
 class TuringMachine(object):
     def __init__(self, instructions, tape, end_state, start_state):
         self.instructions = instructions
-        self.tape = tape
+        self.tape = list(tape)
         self.end_state = end_state
         self.state = start_state
 
@@ -26,12 +37,17 @@ class TuringMachine(object):
             self.tape[i] = self.instructions[self.state][cell]["write"]
             i += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
-        return self.tape
+        return str.join('', self.tape)
+
+
+def main():
+    args = parse_arguments()
+    instructions = json.loads(open(args.instructions).read())
+    try:
+        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.end, args.initial).run()))
+    except Exception as e:
+        print("Looks like the .json-File is invalid!")
 
 
 if __name__ == '__main__':
-    try:
-        instructions = json.loads(open('instructions.json').read())
-        TuringMachine(instructions, list("111"), "q5", "q0").run()
-    except Exception as e:
-        print("Looks like the .json-File is invalid!")
+    main()
