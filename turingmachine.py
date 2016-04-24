@@ -5,19 +5,18 @@ json_data = open('instructions.json').read()
 instructions = json.loads(json_data)
 
 
-def turingMachine(instructions, tape, endState, currentState):
+def turing_machine(instructions, tape, end_state, current_state):
     i = 0
-    # Convert tape to list
-    while currentState != endState:
+    while current_state != end_state:
         if i < len(tape):
-            currentCell = tape[i]
+            current_cell = tape[i]
         else:
-            currentCell = "B"
+            current_cell = "B"
             tape.append("B")
-        tape[i] = instructions[currentState][currentCell]["write"]
-        i += instructions[currentState][currentCell]["move"]
-        currentState = instructions[currentState][currentCell]["nextState"]
+        tape[i] = instructions[current_state][current_cell]["write"]
+        i += instructions[current_state][current_cell]["move"]
+        current_state = instructions[current_state][current_cell]["nextState"]
     return tape
 
 
-print(turingMachine(instructions, list("111"), "q5", "q0"))
+print(turing_machine(instructions, list("111"), "q5", "q0"))
