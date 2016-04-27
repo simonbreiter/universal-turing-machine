@@ -44,8 +44,6 @@ class TuringMachine(object):
             print(self.tape_as_string())
             print('^'.rjust(index, ' '))
             time.sleep(.2)
-        else:
-            print("Rendering not activated.")
 
     def validate_instruction(self):
         for instruction in self.instructions:
