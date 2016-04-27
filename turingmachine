@@ -10,12 +10,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Implementation of a universal Turing Machine.')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
     parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
-
     required_arguments = parser.add_argument_group('required arguments')
     required_arguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
     required_arguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
     required_arguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
-
     return parser.parse_args()
 
 
@@ -26,12 +24,28 @@ class TuringMachine(object):
         self.state = start_state
         self.end_state = end_state
         self.render = render
+        self.validate_instruction()
+
+    def run(self):
+        index = 0
+        while self.state != self.end_state:
+            cell = self.tape[index] if index < len(self.tape) else "B"
+            if index >= len(self.tape):
+                self.tape.append("B")
+            self.tape[index] = self.instructions[self.state][cell]["write"]
+            index += self.instructions[self.state][cell]["move"]
+            self.state = self.instructions[self.state][cell]["nextState"]
+            self.render_screen(index)
+        return self.tape_as_string()
 
     def render_screen(self, index):
-        os.system('clear')
-        print(str.join('', self.tape))
-        print('^'.rjust(index, ' '))
-        time.sleep(.3)
+        if self.render:
+            os.system('clear')
+            print(self.tape_as_string())
+            print('^'.rjust(index, ' '))
+            time.sleep(.2)
+        else:
+            print("Rendering not activated.")
 
     def validate_instruction(self):
         for instruction in self.instructions:
@@ -40,20 +54,7 @@ class TuringMachine(object):
                 if state_to_check not in self.instructions and state_to_check != self.end_state:
                     raise Exception("Invalid configuration, missing states")
 
-    def run(self):
-        self.validate_instruction()
-        index = 0
-        while self.state != self.end_state:
-            if index < len(self.tape):
-                cell = self.tape[index]
-            else:
-                cell = "B"
-                self.tape.append("B")
-            self.tape[index] = self.instructions[self.state][cell]["write"]
-            index += self.instructions[self.state][cell]["move"]
-            self.state = self.instructions[self.state][cell]["nextState"]
-            if self.render:
-                self.render_screen(index)
+    def tape_as_string(self):
         return str.join('', self.tape)
 
 
