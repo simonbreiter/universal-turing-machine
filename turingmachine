@@ -9,6 +9,7 @@ import os
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Implementation of a universal Turing Machine.')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
+    parser.add_argument('-s', '--speed', type=float, action="store", default=.3, help='Rendering speed in seconds')
     parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
     required_arguments = parser.add_argument_group('required arguments')
     required_arguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
@@ -18,12 +19,13 @@ def parse_arguments():
 
 
 class TuringMachine(object):
-    def __init__(self, instructions, tape, start_state, end_state, render):
+    def __init__(self, instructions, tape, start_state, end_state, render, speed):
         self.instructions = instructions
         self.tape = list(tape)
         self.state = start_state
         self.end_state = end_state
         self.render = render
+        self.speed = speed
         self.validate_instruction()
 
     def run(self):
@@ -49,7 +51,7 @@ class TuringMachine(object):
             print(30 * ' ' + '▼')
             self.print_with_pipes(padding*' ' + self.tape_as_string() + (15-(len(self.tape)-(index+1)))*' ')
             print(30 * ' ' + '▲')
-            time.sleep(.4)
+            time.sleep(self.speed)
 
     @staticmethod
     def print_with_pipes(string):
@@ -70,7 +72,7 @@ def main():
     args = parse_arguments()
     try:
         instructions = json.loads(open(args.instructions).read())
-        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render).run()))
+        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render, args.speed).run()))
     except Exception as e:
         print("Looks like something went wrong! - %s" % e)
 
