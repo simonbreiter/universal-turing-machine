@@ -46,7 +46,7 @@ class TuringMachine(object):
             os.system('clear')
             padding = 15 - index
             print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (str(counter).rjust(5), str(self.state).rjust(3), str(index)))
-            self.print_with_pipes(padding * ' ' + self.tape_as_string().ljust(31, ' '))
+            self.print_with_pipes(padding*' ' + self.tape_as_string() + (15-(len(self.tape)-(index+1)))*' ')
             print(30 * ' ' + '^')
             time.sleep(.4)
 
