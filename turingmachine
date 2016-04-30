@@ -27,20 +27,23 @@ class TuringMachine(object):
         self.validate_instruction()
 
     def run(self):
+        counter = 0
         index = 0
         while self.state != self.end_state:
+            counter += 1
             cell = self.tape[index] if index < len(self.tape) else "B"
             if index >= len(self.tape):
                 self.tape.append("B")
             self.tape[index] = self.instructions[self.state][cell]["write"]
             index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
-            self.render_screen(index)
+            self.render_screen(index, counter)
         return self.tape_as_string()
 
-    def render_screen(self, index):
+    def render_screen(self, index, counter):
         if self.render:
             os.system('clear')
+            print("INFO: Count [ %s ] - State [ %s ]\n" % (str(counter).rjust(5), str(self.state).rjust(3)))
             print(self.tape_as_string())
             print('^'.rjust(index, ' '))
             time.sleep(.2)
@@ -62,7 +65,7 @@ def main():
         instructions = json.loads(open(args.instructions).read())
         print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render).run()))
     except Exception as e:
-        print("Looks like something went wrong! - %s" % e.message)
+        print("Looks like something went wrong! - %s" % e)
 
 
 if __name__ == '__main__':
