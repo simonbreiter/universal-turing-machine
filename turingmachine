@@ -47,16 +47,16 @@ class TuringMachine(object):
 
     def render_screen(self, index, counter):
         if self.render:
-            padding_start = 15 - index
-            padding_end = 15 - (len(self.tape) - (index + 1))
-            dynamic_start = index - 15 if index >= 15 else 0
-            dynamic_end = len(self.tape) - (len(self.tape) - index - 15) if len(self.tape) - index > 15 else len(self.tape)
-
+            visible_tape = 15
+            padding_start = visible_tape - index
+            padding_end = visible_tape - (len(self.tape) - (index + 1))
+            dynamic_start = index - visible_tape if index >= visible_tape else 0
+            dynamic_end = len(self.tape) - (len(self.tape) - index - visible_tape) if len(self.tape) - index > visible_tape else len(self.tape)
             os.system('clear')
             print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
-            print(30 * ' ' + '▼')
+            print(visible_tape*2 * ' ' + '▼')
             self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
-            print(30 * ' ' + '▲')
+            print(visible_tape*2 * ' ' + '▲')
             time.sleep(self.speed)
 
     @staticmethod
