@@ -74,7 +74,7 @@ def main():
         instructions = json.loads(open(args.instructions).read())
         print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render, args.speed).run()))
     except Exception as e:
-        print("Looks like something went wrong! - %s" % e)
+        print("Something went wrong! Issue: %s" % e)
 
 
 if __name__ == '__main__':
