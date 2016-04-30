@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# coding=utf-8
 
 import json
 import argparse
+
 import time
 import os
 
@@ -47,9 +49,11 @@ class TuringMachine(object):
         if self.render:
             os.system('clear')
             padding = 15 - index
-            print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (str(counter).rjust(5), str(self.state).rjust(3), str(index)))
+            print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
             print(30 * ' ' + '▼')
-            self.print_with_pipes(padding*' ' + self.tape_as_string()[index-15 if index >= 15 else 0:] + (15-(len(self.tape)-(index+1)))*' ')
+            dynamic_start = index - 15 if index >= 15 else 0
+            dynamic_end = len(self.tape) - (len(self.tape) - index - 15) if len(self.tape) - index > 15 else len(self.tape)
+            self.print_with_pipes(padding * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + (15 - (len(self.tape) - (index + 1))) * ' ')
             print(30 * ' ' + '▲')
             time.sleep(self.speed)
 
@@ -62,7 +66,7 @@ class TuringMachine(object):
             for case in self.instructions[instruction]:
                 state_to_check = self.instructions[instruction][case]['nextState']
                 if state_to_check not in self.instructions and state_to_check != self.end_state:
-                    raise Exception("Invalid configuration, missing states")
+                    raise Exception("Invalid configuration, the state %s does not exist!" % state_to_check)
 
     def tape_as_string(self):
         return str.join('', self.tape)
