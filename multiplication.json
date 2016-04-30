@@ -1,0 +1,55 @@
+{
+    "q0": {
+        "1": {
+            "write": "B",
+            "move": 1,
+            "nextState": "q1"
+        },
+        "0": {
+            "write": "B",
+            "move": 1,
+            "nextState": "q2"
+        }
+    },
+    "q1": {
+        "1": {
+            "write": "1",
+            "move": 1,
+            "nextState": "q1"
+        },
+        "0": {
+            "write": "1",
+            "move": 1,
+            "nextState": "q2"
+        },
+        "B": {
+            "write": "1",
+            "move": -1,
+            "nextState": "q3"
+        }
+    },
+    "q2": {
+        "0": {
+            "write": "0",
+            "move": 1,
+            "nextState": "q2"
+        },
+        "1": {
+            "write": "0",
+            "move": 1,
+            "nextState": "q1"
+        },
+        "B": {
+            "write": "0",
+            "move": 1,
+            "nextState": "q4"
+        }
+    },
+    "q4": {
+        "B": {
+            "write": "1",
+            "move": -1,
+            "nextState": "q3"
+        }
+    }
+}

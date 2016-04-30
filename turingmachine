@@ -47,13 +47,15 @@ class TuringMachine(object):
 
     def render_screen(self, index, counter):
         if self.render:
-            os.system('clear')
-            padding = 15 - index
-            print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
-            print(30 * ' ' + '▼')
+            padding_start = 15 - index
+            padding_end = 15 - (len(self.tape) - (index + 1))
             dynamic_start = index - 15 if index >= 15 else 0
             dynamic_end = len(self.tape) - (len(self.tape) - index - 15) if len(self.tape) - index > 15 else len(self.tape)
-            self.print_with_pipes(padding * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + (15 - (len(self.tape) - (index + 1))) * ' ')
+
+            os.system('clear')
+            print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
+            print(30 * ' ' + '▼')
+            self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
             print(30 * ' ' + '▲')
             time.sleep(self.speed)
 
