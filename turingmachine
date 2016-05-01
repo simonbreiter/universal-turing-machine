@@ -28,6 +28,7 @@ class TuringMachine(object):
         self.end_state = end_state
         self.render = render
         self.speed = speed
+        self.empty_sign = "B"
         self.validate_instruction()
 
     def run(self):
@@ -36,9 +37,14 @@ class TuringMachine(object):
         self.render_screen(index, counter)
         while self.state != self.end_state:
             counter += 1
-            cell = self.tape[index] if index < len(self.tape) else "B"
-            if index >= len(self.tape):
-                self.tape.append("B")
+            if index == -1:
+                self.tape.insert(0, self.empty_sign)
+                index = 0
+            if index < len(self.tape):
+                cell = self.tape[index]
+            else:
+                cell = self.empty_sign
+                self.tape.append(self.empty_sign)
             self.tape[index] = self.instructions[self.state][cell]["write"]
             index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
