@@ -42,14 +42,7 @@
         "B": {
             "write": "0",
             "move": 1,
-            "nextState": "q4"
-        }
-    },
-    "q4": {
-        "B": {
-            "write": "1",
-            "move": -1,
-            "nextState": "q3"
+            "nextState": "q1"
         }
     }
 }
