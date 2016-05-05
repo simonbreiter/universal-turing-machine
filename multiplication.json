@@ -1,31 +1,26 @@
 {
     "q0": {
-        "1": {
-            "write": "B",
+        " ": {
+            "write": " ",
             "move": 1,
             "nextState": "q1"
         },
         "0": {
-            "write": "B",
+            "write": " ",
             "move": 1,
             "nextState": "q2"
         }
     },
     "q1": {
-        "1": {
-            "write": "1",
+        " ": {
+            "write": " ",
             "move": 1,
-            "nextState": "q1"
+            "nextState": "q14"
         },
         "0": {
-            "write": "1",
+            "write": " ",
             "move": 1,
             "nextState": "q2"
-        },
-        "B": {
-            "write": "1",
-            "move": -1,
-            "nextState": "q3"
         }
     },
     "q2": {
@@ -34,15 +29,178 @@
             "move": 1,
             "nextState": "q2"
         },
-        "1": {
-            "write": "0",
+        " ": {
+            "write": " ",
             "move": 1,
-            "nextState": "q1"
+            "nextState": "q3"
+        }
+    },
+    "q3": {
+        "0": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q4"
         },
-        "B": {
+        " ": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q15"
+        }
+    },
+    "q4": {
+        "0": {
             "write": "0",
             "move": 1,
-            "nextState": "q1"
+            "nextState": "q4"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q5"
+        }
+    },
+    "q5": {
+        " ": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q6"
+        },
+        "0": {
+            "write": "0",
+            "move": 1,
+            "nextState": "q5"
+        }
+    },
+    "q6": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q6"
+        },
+        " ": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q7"
+        }
+    },
+    "q7": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q8"
+        },
+        " ": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q9"
+        }
+    },
+    "q8": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q8"
+        },
+        " ": {
+            "write": "0",
+            "move": 1,
+            "nextState": "q3"
+        }
+    },
+    "q9": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q9"
+        },
+        " ": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q10"
+        }
+    },
+    "q10": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q11"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q12"
+        }
+    },
+    "q11": {
+        "0": {
+            "write": "0",
+            "move": -1,
+            "nextState": "q11"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q0"
+        }
+    },
+    "q12": {
+        "0": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q13"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q12"
+        }
+    },
+    "q13": {
+        "0": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q13"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "qdone"
+        }
+    },
+    "q14": {
+        "0": {
+            "write": " ",
+            "move": 1,
+            "nextState": "q14"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "qdone"
+        }
+    },
+    "q15": {
+        "0": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q15"
+        },
+        " ": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q16"
+        }
+    },
+    "q16": {
+        "0": {
+            "write": " ",
+            "move": -1,
+            "nextState": "q16"
+        },
+        " ": {
+            "write": " ",
+            "move": 1,
+            "nextState": "qdone"
         }
     }
 }

@@ -13,6 +13,7 @@ def parse_arguments():
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
     parser.add_argument('-s', '--speed', type=float, action="store", default=.3, help='Rendering speed in seconds')
     parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
+    parser.add_argument('-a', '--interactive', action="store_true", default=False, help='Interactive mode')
     required_arguments = parser.add_argument_group('required arguments')
     required_arguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
     required_arguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
@@ -21,14 +22,15 @@ def parse_arguments():
 
 
 class TuringMachine(object):
-    def __init__(self, instructions, tape, start_state, end_state, render, speed):
+    def __init__(self, instructions, tape, start_state, end_state, render, speed, interactive):
         self.instructions = instructions
         self.tape = list(tape)
         self.state = start_state
         self.end_state = end_state
         self.render = render
         self.speed = speed
-        self.empty_sign = "B"
+        self.interactive = interactive
+        self.empty_sign = " "
         self.validate_instruction()
 
     def run(self):
@@ -63,6 +65,9 @@ class TuringMachine(object):
             print(visible_tape*2 * ' ' + '▼')
             self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
             print(visible_tape*2 * ' ' + '▲')
+        if self.interactive:
+            input()
+        else:
             time.sleep(self.speed)
 
     @staticmethod
@@ -84,7 +89,7 @@ def main():
     args = parse_arguments()
     try:
         instructions = json.loads(open(args.instructions).read())
-        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render, args.speed).run()))
+        print("Input: {} \nOutput: {}".format(args.input, TuringMachine(instructions, args.input, args.initial, args.end, args.render, args.speed, args.interactive).run()))
     except Exception as e:
         print("Something went wrong! Issue: %s" % e)
 
