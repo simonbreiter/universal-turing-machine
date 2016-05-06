@@ -62,7 +62,7 @@ class TuringMachine(object):
         dynamic_start = index - visible_tape if index >= visible_tape else 0
         dynamic_end = len(self.tape) - (len(self.tape) - index - visible_tape) if len(self.tape) - index > visible_tape else len(self.tape)
         os.system('clear')
-        print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
+        print("INFO: Count [%s] - State [%s] - Index [%s]\n" % (counter, self.state, index))
         print(visible_tape*2 * ' ' + '▼')
         self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
         print(visible_tape*2 * ' ' + '▲')
