@@ -79,8 +79,10 @@ class TuringMachine(object):
                     occurence[sign] += 1
                 else:
                     occurence[sign] = 1
+        print("Sign Counter:")
         for k, v in occurence.items():
-            print("Sign: [%s], count: [%s]" % (k, v))
+            print("%sx: %s" % (v, k))
+        print("\n")
 
     @staticmethod
     def print_with_pipes(string):
