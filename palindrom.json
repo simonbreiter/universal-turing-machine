@@ -1,7 +1,7 @@
 {
     "q0": {
         "1": {
-            "write": "B",
+            "write": " ",
             "move": 1,
             "nextState": "q1"
         }
@@ -17,7 +17,7 @@
             "move": 1,
             "nextState": "q2"
         },
-        "B": {
+        " ": {
             "write": "0",
             "move": 1,
             "nextState": "q2"
@@ -29,7 +29,7 @@
             "move": 1,
             "nextState": "q2"
         },
-        "B": {
+        " ": {
             "write": "1",
             "move": -1,
             "nextState": "q3"
@@ -46,7 +46,7 @@
             "move": -1,
             "nextState": "q3"
         },
-        "B": {
+        " ": {
             "write": "1",
             "move": 1,
             "nextState": "q4"
@@ -54,7 +54,7 @@
     },
     "q4": {
         "1": {
-            "write": "B",
+            "write": " ",
             "move": 1,
             "nextState": "q1"
         },

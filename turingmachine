@@ -11,13 +11,13 @@ import os
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Implementation of a universal Turing Machine.')
     parser.add_argument('-b', '--initial', type=str, action="store", default="q0", help='Initial state to begin')
+    parser.add_argument('-e', '--end', type=str, action="store", default="qdone", help='End state')
     parser.add_argument('-s', '--speed', type=float, action="store", default=.3, help='Rendering speed in seconds')
     parser.add_argument('-r', '--render', action="store_true", default=False, help='Render turing machine')
-    parser.add_argument('-a', '--interactive', action="store_true", default=False, help='Interactive mode')
+    parser.add_argument('-a', '--interactive', action="store_true", default=False, help='Interactive mode, speed will be useless when using this parameter')
     required_arguments = parser.add_argument_group('required arguments')
     required_arguments.add_argument('-i', '--instructions', type=str, action="store", default=False, required=True, help='Instructions, as JSON file')
     required_arguments.add_argument('-t', '--input', type=str, action="store", default=False, required=True, help='Input tape')
-    required_arguments.add_argument('-e', '--end', type=str, action="store", default=False, required=True, help='End state')
     return parser.parse_args()
 
 
@@ -30,7 +30,7 @@ class TuringMachine(object):
         self.render = render
         self.speed = speed
         self.interactive = interactive
-        self.empty_sign = "B"
+        self.empty_sign = " "
         self.validate_instruction()
 
     def run(self):
@@ -66,10 +66,10 @@ class TuringMachine(object):
             self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
             print(visible_tape*2 * ' ' + '▲')
             self.print_sign_occurences()
-        if self.interactive:
-            input()
-        else:
-            time.sleep(self.speed)
+            if self.interactive:
+                input()
+            else:
+                time.sleep(self.speed)
 
     def print_sign_occurences(self):
         occurence = {}
