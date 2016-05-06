@@ -9,7 +9,7 @@ The machine reads a JSON file as instruction and process the input accordingly.
 
 CLI Example:
 ```sh
-# Mutliplication
+# Multiplication
 ./turingmachine --instructions multiplication.json --input "00 000" -r -s 0.01
 ./turingmachine --instructions multiplication.json --input "00000000000000000" -r -s 0.01
 ./turingmachine --instructions multiplication.json --input "0000000000000000000000000 0" -r -s 0.01
