@@ -50,26 +50,27 @@ class TuringMachine(object):
             self.tape[index] = self.instructions[self.state][cell]["write"]
             index += self.instructions[self.state][cell]["move"]
             self.state = self.instructions[self.state][cell]["nextState"]
-            self.render_screen(index, counter)
+            if self.render:
+                self.render_screen(index, counter)
+        self.render_screen(index, counter)
         return self.tape_as_string().replace(self.empty_sign, "")
 
     def render_screen(self, index, counter):
-        if self.render:
-            visible_tape = 15
-            padding_start = visible_tape - index
-            padding_end = visible_tape - (len(self.tape) - (index + 1))
-            dynamic_start = index - visible_tape if index >= visible_tape else 0
-            dynamic_end = len(self.tape) - (len(self.tape) - index - visible_tape) if len(self.tape) - index > visible_tape else len(self.tape)
-            os.system('clear')
-            print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
-            print(visible_tape*2 * ' ' + '▼')
-            self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
-            print(visible_tape*2 * ' ' + '▲')
-            self.print_sign_occurences()
-            if self.interactive:
-                input()
-            else:
-                time.sleep(self.speed)
+        visible_tape = 15
+        padding_start = visible_tape - index
+        padding_end = visible_tape - (len(self.tape) - (index + 1))
+        dynamic_start = index - visible_tape if index >= visible_tape else 0
+        dynamic_end = len(self.tape) - (len(self.tape) - index - visible_tape) if len(self.tape) - index > visible_tape else len(self.tape)
+        os.system('clear')
+        print("INFO: Count [ %s ] - State [ %s ] - Index [ %s ]\n" % (counter, self.state, index))
+        print(visible_tape*2 * ' ' + '▼')
+        self.print_with_pipes(padding_start * ' ' + self.tape_as_string()[dynamic_start:dynamic_end] + padding_end * ' ')
+        print(visible_tape*2 * ' ' + '▲')
+        self.print_sign_occurences()
+        if self.interactive:
+            input()
+        else:
+            time.sleep(self.speed)
 
     def print_sign_occurences(self):
         occurence = {}
