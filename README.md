@@ -26,8 +26,13 @@ CLI Example:
 
 ## Author(s)
 
-- Simon Breiter
-- Emanuele Mazzotta
+[Simon Breiter](mailto:hello@simonbreiter.ch)
+[Emanuele Mazzotta](mailto:hello@mazzotta.me)
 
 ## Credits
-Inspired by [Swizec Teller](http://swizec.com/blog/a-turing-machine-in-133-bytes-of-javascript/swizec/3069)
+[Swizec Teller](http://swizec.com/blog/a-turing-machine-in-133-bytes-of-javascript/swizec/3069)
+
+## License
+
+[MIT License](LICENSE.md) © Simon Breiter, Emanuele Mazzotta
+
