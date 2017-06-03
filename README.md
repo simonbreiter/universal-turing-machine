@@ -22,7 +22,7 @@ CLI Example:
 
 ## Author(s)
 
-[Simon Breiter](mailto:hello@simonbreiter.ch)
+[Simon Breiter](mailto:hello@simonbreiter.ch)  
 [Emanuele Mazzotta](mailto:hello@mazzotta.me)
 
 ## Credits
