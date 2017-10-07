@@ -8,6 +8,9 @@ import time
 import os
 
 
+EMPTY_CHARACTER = ' '
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description='Implementation of a universal Turing Machine.')
@@ -38,8 +41,7 @@ class TuringMachine(object):
         self.render = render
         self.speed = speed
         self.interactive = interactive
-        self.empty_sign = ' '
-        self.validate_instruction()
+        self.validate_instruction(self.instructions, self.end_state)
 
     def run(self):
         counter = 0
@@ -48,13 +50,13 @@ class TuringMachine(object):
         while self.state != self.end_state:
             counter += 1
             if index == -1:
-                self.tape.insert(0, self.empty_sign)
+                self.tape.insert(0, EMPTY_CHARACTER)
                 index = 0
             if index < len(self.tape):
                 cell = self.tape[index]
             else:
-                cell = self.empty_sign
-                self.tape.append(self.empty_sign)
+                cell = EMPTY_CHARACTER
+                self.tape.append(EMPTY_CHARACTER)
             self.tape[index] = self.instructions[self.state][cell]['write']
             index += self.get_direction(
                 self.instructions[self.state][cell]['move'])
@@ -62,7 +64,7 @@ class TuringMachine(object):
             if self.render:
                 self.render_screen(index, counter)
         self.render_screen(index, counter)
-        return self.list_to_string(self.tape).replace(self.empty_sign, '')
+        return self.list_to_string(self.tape).replace(EMPTY_CHARACTER, '')
 
     def render_screen(self, index, counter):
         visible_tape = 15
@@ -76,33 +78,32 @@ class TuringMachine(object):
         print('Current State {}'.format(self.state.rjust(7)))
         print('Tape Index {} '.format(str(index).rjust(10)))
         print(visible_tape * 2 * ' ' + '▼')
-        self.print_with_pipes(padding_start * ' ' + self.list_to_string(self.tape)
+        self.print_between_pipes(padding_start * ' ' + self.list_to_string(self.tape)
                               [dynamic_start:dynamic_end] + padding_end * ' ')
         print(visible_tape * 2 * ' ' + '▲')
-        self.print_sign_occurrences()
+        self.print_character_occurrences(self.tape)
         if self.interactive:
             input()
         else:
             time.sleep(self.speed)
 
-    def print_sign_occurrences(self):
-        occurrence = {}
-        for sign in self.tape:
-            if sign != self.empty_sign:
-                if sign in occurrence:
-                    occurrence[sign] += 1
-                else:
-                    occurrence[sign] = 1
-        print('Sign Counter')
-        for k, v in occurrence.items():
-            print('{}x: {}'.format(v, k))
+    @staticmethod
+    def print_character_occurrences(tape):
+        clean_tape = TuringMachine.remove_empty_character(tape)
+        occurrences = {character: 0 for character in clean_tape}
+        for character in clean_tape:
+            occurrences[character] += 1
+        print('Character Counter')
+        for character, occurrence in occurrences.items():
+            print('{}x: {}'.format(occurrence, character))
         print()
 
-    def validate_instruction(self):
-        for instruction in self.instructions:
-            for case in self.instructions[instruction]:
-                state_to_check = self.instructions[instruction][case]['nextState']
-                if state_to_check not in self.instructions and state_to_check != self.end_state:
+    @staticmethod
+    def validate_instruction(instructions, end_state):
+        for instruction in instructions:
+            for case in instructions[instruction]:
+                state_to_check = instructions[instruction][case]['nextState']
+                if state_to_check not in instructions and state_to_check != end_state:
                     raise Exception('Invalid configuration, the state {} does not exist!'.format(state_to_check))
 
     @staticmethod
@@ -110,13 +111,17 @@ class TuringMachine(object):
         return str.join('', to_stringify)
 
     @staticmethod
-    def print_with_pipes(string):
+    def print_between_pipes(string):
         print('|'.join(string[i:i + 1] for i in range(0, len(string))))
 
     @staticmethod
     def get_direction(direction):
         directions = {'right': 1, 'left': -1}
         return directions[direction] if direction in directions else 0
+
+    @staticmethod
+    def remove_empty_character(dirty_list):
+        return [character for character in dirty_list if character != EMPTY_CHARACTER]
 
 
 def main():
