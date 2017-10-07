@@ -1,0 +1,9 @@
+{
+  "q0": {
+    " ": {
+      "write": "1",
+      "move": "left",
+      "nextState": "q0"
+    }
+  }
+}

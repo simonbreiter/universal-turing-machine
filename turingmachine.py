@@ -51,23 +51,26 @@ class TuringMachine(object):
         self.render(index, steps_counter, render_override=True)
 
         while self.state != self.end_state:
-            steps_counter += 1
             if index == -1:
                 self.tape.insert(0, EMPTY_CHARACTER)
                 index = 0
-            if index < len(self.tape):
-                cell = self.tape[index]
-            else:
-                cell = EMPTY_CHARACTER
+            if index == len(self.tape):
                 self.tape.append(EMPTY_CHARACTER)
-            self.tape[index] = self.instructions[self.state][cell]['write']
-            index += self.get_direction(self.instructions[self.state][cell]['move'])
-            self.state = self.instructions[self.state][cell]['nextState']
+
+            steps_counter += 1
+            cell = self.tape[index]
+            action = self.instructions[self.state][cell]
+
+            self.tape[index], self.state, index = (
+                action['write'],
+                action['nextState'],
+                self.get_next_index(index, action['move'])
+            )
+
             self.render(index, steps_counter)
 
         self.render(index, steps_counter, render_override=True)
-        result = self.list_to_string(self.remove_empty_character(self.tape))
-        return result
+        return self.list_to_string(self.remove_empty_character(self.tape))
 
     def render(self, index, steps_counter, render_override=False):
         if self.activate_render or self.activate_interactive or render_override:
@@ -125,8 +128,8 @@ class TuringMachine(object):
         return '|'.join(string[i:i + 1] for i in range(0, len(string)))
 
     @staticmethod
-    def get_direction(direction):
-        return ALLOWED_TAPE_MOVEMENTS[direction] if direction in ALLOWED_TAPE_MOVEMENTS.keys() else 0
+    def get_next_index(index, direction):
+        return index + ALLOWED_TAPE_MOVEMENTS[direction] if direction in ALLOWED_TAPE_MOVEMENTS.keys() else index
 
     @staticmethod
     def remove_empty_character(dirty_list):
