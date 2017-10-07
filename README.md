@@ -22,6 +22,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 1. The JSON is read and converted into a Python dict containing all possible states and instructions.
 2. The Python dict is validated and an exception is thrown, should the definition contain any errors (i.e. a state is referenced but never defined).
 3. The Python dict is used ad-hoc to find out (depending on the current state and the character at the current index of the Turing Machine):
+
 - What should be written on the tape (can be any character)
 - Which direction the tape should move (right or left)
 - What state the machine should switch to (any state as defined in the JSON)
@@ -42,11 +43,11 @@ The machine reads a JSON file as instruction and processes the input accordingly
 
 #### Legend
 
-* <state-name>: Any state name, usually q0, q1, etc.
-* <character-action>: Define action if Turing Machine reads this character
-* <character-to-write>: ONE character to write at current index
-* <right|left>: Which direction to go next
-* <next-state-name>: The next state name to switch to next
+* "<state-name>": Any state name, usually q0, q1, etc.
+* "<character-action>": Define action if Turing Machine reads this character
+* "<character-to-write>": ONE character to write at current index
+* "<right|left>": Which direction to move
+* "<next-state-name>": The state name to switch to next
 
 ### Example
 
