@@ -48,7 +48,7 @@ class TuringMachine(object):
                 cell = self.empty_sign
                 self.tape.append(self.empty_sign)
             self.tape[index] = self.instructions[self.state][cell]["write"]
-            index += self.instructions[self.state][cell]["move"]
+            index += self.get_direction(self.instructions[self.state][cell]["move"])
             self.state = self.instructions[self.state][cell]["nextState"]
             if self.render:
                 self.render_screen(index, counter)
@@ -98,6 +98,10 @@ class TuringMachine(object):
 
     def tape_as_string(self):
         return str.join('', self.tape)
+
+    def get_direction(self, direction):
+        directions = {"right": 1, "left": -1}
+        return directions[direction] if direction in directions else 0
 
 
 def main():
