@@ -47,6 +47,8 @@ class TuringMachine(object):
         counter = 0
         index = 0
         self.render_screen(index, counter)
+        if not self.render:
+            print("Render mode is disabled. Calculating results, please wait.")
         while self.state != self.end_state:
             counter += 1
             if index == -1:
@@ -64,7 +66,7 @@ class TuringMachine(object):
             if self.render:
                 self.render_screen(index, counter)
         self.render_screen(index, counter)
-        return self.list_to_string(self.tape).replace(EMPTY_CHARACTER, '')
+        return self.list_to_string(self.remove_empty_character(self.tape))
 
     def render_screen(self, index, counter):
         visible_tape = 15
