@@ -9,10 +9,10 @@ The machine reads a JSON file as instruction and processes the input accordingly
 
 ```sh
 # Multiplication
-./turingmachine --instructions assets/multiplication.json --input "00 000" -r -s .01
-./turingmachine --instructions assets/multiplication.json --input "00000000000000000" -r -s .01
-./turingmachine --instructions assets/multiplication.json --input "0000000000000000000000000 0" -r -s .01
-./turingmachine --instructions assets/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
+./turingmachine.py --instructions assets/multiplication.json --input "00 000" -r -s .01
+./turingmachine.py --instructions assets/multiplication.json --input "00000000000000000" -r -s .01
+./turingmachine.py --instructions assets/multiplication.json --input "0000000000000000000000000 0" -r -s .01
+./turingmachine.py --instructions assets/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
 ```
 
 ## JSON Encoding
