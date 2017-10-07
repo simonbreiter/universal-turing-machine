@@ -48,7 +48,7 @@ class TuringMachine(object):
         index = 0
         self.render_screen(index, counter)
         if not self.render:
-            print("Render mode is disabled. Calculating results, please wait.")
+            print('Render mode is disabled. Calculating results, please wait.')
         while self.state != self.end_state:
             counter += 1
             if index == -1:
@@ -80,8 +80,8 @@ class TuringMachine(object):
         print('Current State {}'.format(self.state.rjust(7)))
         print('Tape Index {} '.format(str(index).rjust(10)))
         print(visible_tape * 2 * ' ' + '▼')
-        self.print_between_pipes(padding_start * ' ' + self.list_to_string(self.tape)
-                              [dynamic_start:dynamic_end] + padding_end * ' ')
+        print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)
+                              [dynamic_start:dynamic_end] + padding_end * ' '))
         print(visible_tape * 2 * ' ' + '▲')
         self.print_character_occurrences(self.tape)
         if self.interactive:
@@ -91,14 +91,19 @@ class TuringMachine(object):
 
     @staticmethod
     def print_character_occurrences(tape):
-        clean_tape = TuringMachine.remove_empty_character(tape)
-        occurrences = {character: 0 for character in clean_tape}
-        for character in clean_tape:
-            occurrences[character] += 1
+        occurrences = TuringMachine.get_character_occurrences(tape)
         print('Character Counter')
         for character, occurrence in occurrences.items():
             print('{}x: {}'.format(occurrence, character))
         print()
+
+    @staticmethod
+    def get_character_occurrences(tape):
+        clean_tape = TuringMachine.remove_empty_character(tape)
+        occurrences = {character: 0 for character in clean_tape}
+        for character in clean_tape:
+            occurrences[character] += 1
+        return occurrences
 
     @staticmethod
     def validate_instruction(instructions, end_state):
@@ -113,8 +118,8 @@ class TuringMachine(object):
         return str.join('', to_stringify)
 
     @staticmethod
-    def print_between_pipes(string):
-        print('|'.join(string[i:i + 1] for i in range(0, len(string))))
+    def insert_pipes_between_characters(string):
+        return '|'.join(string[i:i + 1] for i in range(0, len(string)))
 
     @staticmethod
     def get_direction(direction):
