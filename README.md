@@ -22,9 +22,9 @@ The machine reads a JSON file as instruction and processes the input accordingly
 1. The JSON is read and converted into a Python dict containing all possible states and instructions.
 2. The Python dict is validated and an exception is thrown, should the definition contain any errors (i.e. a state is referenced but never defined).
 3. The Python dict is used ad-hoc to find out (depending on the current state and the character at the current index of the Turing Machine):
-* What should be written on the tape (can be any character)
-* Which direction the tape should move (right or left)
-* What new state the machine will be in (any state as defined in the JSON)
+- What should be written on the tape (can be any character)
+- Which direction the tape should move (right or left)
+- What state the machine should switch to (any state as defined in the JSON)
 
 ### Structure
 
@@ -83,8 +83,9 @@ If q1 detects an empty character it will write a zero at its position, move to t
 If q1 detects a one it will write a zero at its position, move to the left and switch to state qdone.
 
 Try it yourself!
+
 ```bash
-./turingmachine.py --instructions assets/readme-example.json -b q0 -e qdone --input " " -r -s 1
+./turingmachine.py --instructions assets/readme_example.json -b q0 -e qdone --input " " -r -s 1
 ```
 
 ## Author(s)

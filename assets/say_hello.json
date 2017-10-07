@@ -1,0 +1,37 @@
+{
+  "q0": {
+    " ": {
+      "write": "o",
+      "move": "left",
+      "nextState": "q1"
+    }
+  },
+  "q1": {
+    " ": {
+      "write": "l",
+      "move": "left",
+      "nextState": "q2"
+    }
+  },
+  "q2": {
+    " ": {
+      "write": "l",
+      "move": "left",
+      "nextState": "q3"
+    }
+  },
+  "q3": {
+    " ": {
+      "write": "e",
+      "move": "left",
+      "nextState": "q4"
+    }
+  },
+  "q4": {
+    " ": {
+      "write": "h",
+      "move": "left",
+      "nextState": "qdone"
+    }
+  }
+}
