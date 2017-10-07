@@ -8,8 +8,9 @@ import time
 import os
 
 
+ALLOWED_TAPE_MOVEMENTS = {'right': 1, 'left': -1}
 EMPTY_CHARACTER = ' '
-ALLOWED_TAPE_MOVEMENTS = ["right", "left"]
+VISIBLE_TAPE_LENGTH = 20
 
 
 def parse_arguments():
@@ -70,20 +71,20 @@ class TuringMachine(object):
         return self.list_to_string(self.remove_empty_character(self.tape))
 
     def render_screen(self, index, counter):
-        visible_tape = 15
-        padding_start = visible_tape - index
-        padding_end = visible_tape - (len(self.tape) - (index + 1))
-        dynamic_start = index - visible_tape if index >= visible_tape else 0
-        dynamic_end = len(self.tape) - (len(self.tape) - index - visible_tape) if len(
-            self.tape) - index > visible_tape else len(self.tape)
+        padding_start = VISIBLE_TAPE_LENGTH - index
+        padding_end = VISIBLE_TAPE_LENGTH - (len(self.tape) - (index + 1))
+        dynamic_start = index - VISIBLE_TAPE_LENGTH if index >= VISIBLE_TAPE_LENGTH else 0
+        dynamic_end = len(self.tape) - (len(self.tape) - index - VISIBLE_TAPE_LENGTH) if len(
+            self.tape) - index > VISIBLE_TAPE_LENGTH else len(self.tape)
         os.system('clear')
         print('Steps Counter {}'.format(str(counter).rjust(7)))
         print('Current State {}'.format(self.state.rjust(7)))
         print('Tape Index {} '.format(str(index).rjust(10)))
-        print(visible_tape * 2 * ' ' + '▼')
-        print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)
-                              [dynamic_start:dynamic_end] + padding_end * ' '))
-        print(visible_tape * 2 * ' ' + '▲')
+        print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
+        print(self.insert_pipes_between_characters(padding_start * ' ' +
+                                                   self.list_to_string(self.tape)[dynamic_start:dynamic_end] +
+                                                   padding_end * ' '))
+        print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▲' + VISIBLE_TAPE_LENGTH * 2 * '=')
         self.print_character_occurrences(self.tape)
         if self.interactive:
             input()
@@ -111,7 +112,7 @@ class TuringMachine(object):
         for instruction in instructions:
             for case in instructions[instruction]:
                 move = instructions[instruction][case]['move']
-                if move not in ALLOWED_TAPE_MOVEMENTS:
+                if move not in ALLOWED_TAPE_MOVEMENTS.keys():
                     raise Exception('Invalid configuration, the movement "{}" is invalid!'.format(move))
                 state_to_check = instructions[instruction][case]['nextState']
                 if state_to_check not in instructions and state_to_check != end_state:
@@ -127,8 +128,7 @@ class TuringMachine(object):
 
     @staticmethod
     def get_direction(direction):
-        directions = {'right': 1, 'left': -1}
-        return directions[direction] if direction in directions else 0
+        return ALLOWED_TAPE_MOVEMENTS[direction] if direction in ALLOWED_TAPE_MOVEMENTS.keys() else 0
 
     @staticmethod
     def remove_empty_character(dirty_list):
