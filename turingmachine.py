@@ -62,7 +62,7 @@ class TuringMachine(object):
             if self.render:
                 self.render_screen(index, counter)
         self.render_screen(index, counter)
-        return self.tape_as_string().replace(self.empty_sign, '')
+        return self.list_to_string(self.tape).replace(self.empty_sign, '')
 
     def render_screen(self, index, counter):
         visible_tape = 15
@@ -76,38 +76,38 @@ class TuringMachine(object):
         print('Current State {}'.format(self.state.rjust(7)))
         print('Tape Index {} '.format(str(index).rjust(10)))
         print(visible_tape * 2 * ' ' + '▼')
-        self.print_with_pipes(padding_start * ' ' + self.tape_as_string()
+        self.print_with_pipes(padding_start * ' ' + self.list_to_string(self.tape)
                               [dynamic_start:dynamic_end] + padding_end * ' ')
         print(visible_tape * 2 * ' ' + '▲')
-        self.print_sign_occurences()
+        self.print_sign_occurrences()
         if self.interactive:
             input()
         else:
             time.sleep(self.speed)
 
-    def print_sign_occurences(self):
-        occurence = {}
+    def print_sign_occurrences(self):
+        occurrence = {}
         for sign in self.tape:
             if sign != self.empty_sign:
-                if sign in occurence:
-                    occurence[sign] += 1
+                if sign in occurrence:
+                    occurrence[sign] += 1
                 else:
-                    occurence[sign] = 1
+                    occurrence[sign] = 1
         print('Sign Counter')
-        for k, v in occurence.items():
+        for k, v in occurrence.items():
             print('{}x: {}'.format(v, k))
-        print('\n')
+        print()
 
     def validate_instruction(self):
         for instruction in self.instructions:
             for case in self.instructions[instruction]:
                 state_to_check = self.instructions[instruction][case]['nextState']
                 if state_to_check not in self.instructions and state_to_check != self.end_state:
-                    raise Exception(
-                        'Invalid configuration, the state {} does not exist!'.format(state_to_check))
+                    raise Exception('Invalid configuration, the state {} does not exist!'.format(state_to_check))
 
-    def tape_as_string(self):
-        return str.join('', self.tape)
+    @staticmethod
+    def list_to_string(to_stringify):
+        return str.join('', to_stringify)
 
     @staticmethod
     def print_with_pipes(string):
@@ -123,13 +123,15 @@ def main():
     args = parse_arguments()
     try:
         instructions = json.loads(open(args.instructions).read())
-        print('Input: {} \nOutput: {}'.format(args.input, TuringMachine(instructions,
-                                                                        args.input,
-                                                                        args.initial,
-                                                                        args.end,
-                                                                        args.render,
-                                                                        args.speed,
-                                                                        args.interactive).run()))
+        result = TuringMachine(instructions,
+                               args.input,
+                               args.initial,
+                               args.end,
+                               args.render,
+                               args.speed,
+                               args.interactive).run()
+        print('Input: {}'.format(args.input))
+        print('Output: {}'.format(result))
     except Exception as e:
         print('Something went wrong! Issue: {}'.format(e))
 
