@@ -19,9 +19,9 @@ The machine reads a JSON file as instruction and processes the input accordingly
 
 ### Interpretation
 
-In a first step the JSON is read and converted into a Python dictionary containing all possible states and it’s corresponding instructions.
-In a second step the Python dictionary (based on the JSON file) is validated and an exception is thrown, should the definition contain any errors (i.e. a state is referenced but never defined in the JSON).
-In a third step the Python dictionary is used ad-hoc to find out (depending on the current state and the character at the current index of the Turing Machine):
+1. The JSON is read and converted into a Python dict containing all possible states and instructions.
+2. The Python dict is validated and an exception is thrown, should the definition contain any errors (i.e. a state is referenced but never defined).
+3. The Python dict is used ad-hoc to find out (depending on the current state and the character at the current index of the Turing Machine):
 * What should be written on the tape (can be any character)
 * Which direction the tape should move (right or left)
 * What new state the machine will be in (any state as defined in the JSON)
@@ -34,10 +34,57 @@ In a third step the Python dictionary is used ad-hoc to find out (depending on t
         "<character-action>": {
             "write": "<character-to-write>",
             "move": "<right|left>",
-          	"nextState": "<state-name>"
+          	"nextState": "<next-state-name>"
         }
     }
 }
+```
+
+#### Legend
+
+* <state-name>: Any state name, usually q0, q1, etc.
+* <character-action>: Define action if Turing Machine reads this character
+* <character-to-write>: ONE character to write at current index
+* <right|left>: Which direction to go next
+* <next-state-name>: The next state name to switch to next
+
+### Example
+
+```json
+{
+    "q0": {
+        " ": {
+            "write": "1",
+            "move": "right",
+          	"nextState": "q1"
+        }
+    },
+    "q1": {
+        " ": {
+            "write": "0",
+            "move": "left",
+            "nextState": "q1"
+        },
+        "1": {
+            "write": "0",
+            "move": "left",
+            "nextState": "qdone"
+        }
+    }
+}
+```
+
+#### Explanation
+
+Assumptions: Initial state is q0 and end state is q1 (can be defined via program arguments)
+
+If q0 detects an empty character it will write a one at its position, move to the right and switch to state q1.
+If q1 detects an empty character it will write a zero at its position, move to the left and switch to state q1.
+If q1 detects a one it will write a zero at its position, move to the left and switch to state qdone.
+
+Try it yourself!
+```bash
+./turingmachine.py --instructions assets/readme-example.json -b q0 -e qdone --input " " -r -s 1
 ```
 
 ## Author(s)

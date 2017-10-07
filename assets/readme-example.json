@@ -1,0 +1,21 @@
+{
+  "q0": {
+    " ": {
+      "write": "1",
+      "move": "right",
+      "nextState": "q1"
+    }
+  },
+  "q1": {
+    " ": {
+      "write": "0",
+      "move": "left",
+      "nextState": "q1"
+    },
+    "1": {
+      "write": "0",
+      "move": "left",
+      "nextState": "qdone"
+    }
+  }
+}

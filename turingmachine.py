@@ -83,17 +83,16 @@ class TuringMachine(object):
             print('Steps Counter {}'.format(str(steps_counter).rjust(7)))
             print('Current State {}'.format(self.state.rjust(7)))
             print('Tape Index {} '.format(str(index).rjust(10)))
+            print('Render Mode')
+            print('[{}] Automatic'.format('X' if self.activate_render and not self.activate_interactive else ' '))
+            print('[{}] Interactive (Press any key to render next step...)'.format('X' if self.activate_interactive else ' '))
+            print('[{}] None (Please wait for results...)'.format('X' if not self.activate_interactive and not self.activate_render else ' '))
             print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
             print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)[dynamic_start:dynamic_end] + padding_end * ' '))
             print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▲' + VISIBLE_TAPE_LENGTH * 2 * '=')
             print('Character Counter')
             for character, occurrence in self.get_character_occurrences(self.tape).items():
                 print('{}x: {}'.format(occurrence, character))
-            print()
-            print('Render Mode')
-            print('[{}] RENDER AUTOMATICALLY'.format('X' if self.activate_render and not self.activate_interactive else ' '))
-            print('[{}] RENDER INTERACTIVELY (Press any key to render next step...)'.format('X' if self.activate_interactive else ' '))
-            print('[{}] NO RENDERING (Please wait for results...)'.format('X' if not self.activate_interactive and not self.activate_render else ' '))
             print()
             if self.activate_interactive:
                 input()
@@ -112,12 +111,13 @@ class TuringMachine(object):
     def validate_instruction(instructions, end_state):
         for instruction in instructions:
             for case in instructions[instruction]:
-                move = instructions[instruction][case]['move']
-                if move not in ALLOWED_TAPE_MOVEMENTS.keys():
-                    raise Exception('Invalid configuration, the movement "{}" is invalid!'.format(move))
-                state_to_check = instructions[instruction][case]['nextState']
-                if state_to_check not in instructions and state_to_check != end_state:
-                    raise Exception('Invalid configuration, the state "{}" does not exist!'.format(state_to_check))
+                action = instructions[instruction][case]
+                if len(action['write']) != 1:
+                    raise Exception('Invalid config! Use ONE character, instead of "{}"!'.format(action['write']))
+                if action['move'] not in ALLOWED_TAPE_MOVEMENTS.keys():
+                    raise Exception('Invalid config! Use "right" or "left", not "{}"!'.format(action['move']))
+                if action['nextState'] not in instructions and action['nextState'] != end_state:
+                    raise Exception('Invalid config! State "{}" needs to be defined!'.format(action['nextState']))
 
     @staticmethod
     def list_to_string(to_stringify):
