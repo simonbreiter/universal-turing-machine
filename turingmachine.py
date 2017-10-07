@@ -9,6 +9,7 @@ import os
 
 
 EMPTY_CHARACTER = ' '
+ALLOWED_TAPE_MOVEMENTS = ["right", "left"]
 
 
 def parse_arguments():
@@ -109,9 +110,12 @@ class TuringMachine(object):
     def validate_instruction(instructions, end_state):
         for instruction in instructions:
             for case in instructions[instruction]:
+                move = instructions[instruction][case]['move']
+                if move not in ALLOWED_TAPE_MOVEMENTS:
+                    raise Exception('Invalid configuration, the movement "{}" is invalid!'.format(move))
                 state_to_check = instructions[instruction][case]['nextState']
                 if state_to_check not in instructions and state_to_check != end_state:
-                    raise Exception('Invalid configuration, the state {} does not exist!'.format(state_to_check))
+                    raise Exception('Invalid configuration, the state "{}" does not exist!'.format(state_to_check))
 
     @staticmethod
     def list_to_string(to_stringify):
