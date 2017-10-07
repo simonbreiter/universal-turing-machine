@@ -45,15 +45,13 @@ class TuringMachine(object):
         self.validate_instruction(self.instructions, self.end_state)
 
     def run(self):
-        counter = 0
+        steps_counter = 0
         index = 0
 
-        self.render(index, counter, self.tape, self.state, self.speed, self.activate_interactive)
-        if not self.activate_render:
-            print('RENDER MODE IS DISABLED. Calculating results, please wait...')
+        self.render(index, steps_counter, render_override=True)
 
         while self.state != self.end_state:
-            counter += 1
+            steps_counter += 1
             if index == -1:
                 self.tape.insert(0, EMPTY_CHARACTER)
                 index = 0
@@ -63,41 +61,41 @@ class TuringMachine(object):
                 cell = EMPTY_CHARACTER
                 self.tape.append(EMPTY_CHARACTER)
             self.tape[index] = self.instructions[self.state][cell]['write']
-            index += self.get_direction(
-                self.instructions[self.state][cell]['move'])
+            index += self.get_direction(self.instructions[self.state][cell]['move'])
             self.state = self.instructions[self.state][cell]['nextState']
-            if self.activate_render:
-                self.render(index, counter, self.tape, self.state, self.speed, self.activate_interactive)
+            self.render(index, steps_counter)
 
-        self.render(index, counter, self.tape, self.state, self.speed, self.activate_interactive)
+        self.render(index, steps_counter, render_override=True)
         result = self.list_to_string(self.remove_empty_character(self.tape))
         return result
 
-    @staticmethod
-    def render(index, counter, tape, state, speed, interactive):
-        length = len(tape)
-        padding_start = VISIBLE_TAPE_LENGTH - index
-        padding_end = VISIBLE_TAPE_LENGTH - (length - (index + 1))
-        dynamic_start = index - VISIBLE_TAPE_LENGTH if index >= VISIBLE_TAPE_LENGTH else 0
-        dynamic_end = length - length - index - VISIBLE_TAPE_LENGTH if length - index > VISIBLE_TAPE_LENGTH else length
-        os.system('clear')
-        print('Steps Counter {}'.format(str(counter).rjust(7)))
-        print('Current State {}'.format(state.rjust(7)))
-        print('Tape Index {} '.format(str(index).rjust(10)))
-        print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
-        print(TuringMachine.insert_pipes_between_characters(padding_start * ' ' +
-                                                            TuringMachine.list_to_string(tape)[
-                                                            dynamic_start:dynamic_end] +
-                                                            padding_end * ' '))
-        print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▲' + VISIBLE_TAPE_LENGTH * 2 * '=')
-        print('Character Counter')
-        for character, occurrence in TuringMachine.get_character_occurrences(tape).items():
-            print('{}x: {}'.format(occurrence, character))
-        print()
-        if interactive:
-            input()
-        else:
-            time.sleep(speed)
+    def render(self, index, steps_counter, render_override=False):
+        if self.activate_render or self.activate_interactive or render_override:
+            length = len(self.tape)
+            padding_start = VISIBLE_TAPE_LENGTH - index
+            padding_end = VISIBLE_TAPE_LENGTH - (length - (index + 1))
+            dynamic_start = index - VISIBLE_TAPE_LENGTH if index >= VISIBLE_TAPE_LENGTH else 0
+            dynamic_end = length - (length - index - VISIBLE_TAPE_LENGTH) if length - index > VISIBLE_TAPE_LENGTH else length
+            os.system('clear')
+            print('Steps Counter {}'.format(str(steps_counter).rjust(7)))
+            print('Current State {}'.format(self.state.rjust(7)))
+            print('Tape Index {} '.format(str(index).rjust(10)))
+            print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
+            print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)[dynamic_start:dynamic_end] + padding_end * ' '))
+            print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▲' + VISIBLE_TAPE_LENGTH * 2 * '=')
+            print('Character Counter')
+            for character, occurrence in self.get_character_occurrences(self.tape).items():
+                print('{}x: {}'.format(occurrence, character))
+            print()
+            print('Render Mode')
+            print('[{}] RENDER AUTOMATICALLY'.format('X' if self.activate_render and not self.activate_interactive else ' '))
+            print('[{}] RENDER INTERACTIVELY (Press any key to render next step...)'.format('X' if self.activate_interactive else ' '))
+            print('[{}] NO RENDERING (Please wait for results...)'.format('X' if not self.activate_interactive and not self.activate_render else ' '))
+            print()
+            if self.activate_interactive:
+                input()
+            else:
+                time.sleep(self.speed)
 
     @staticmethod
     def get_character_occurrences(tape):
