@@ -8,7 +8,7 @@ import time
 import os
 
 from config import Config
-from utils import get_next_index, list_to_string, remove_empty_character, pipeify, count_occurrences
+from utils import next_index, list_to_string, remove_empty_character, pipeify, count_occurrences
 
 
 def parse_arguments():
@@ -18,11 +18,9 @@ def parse_arguments():
     parser.add_argument('-s', '--speed', type=float, action='store', default=.3, help='Rendering speed in seconds')
     parser.add_argument('-r', '--render', action='store_true', default=False, help='Render turing machine')
     parser.add_argument('-a', '--interactive', action='store_true', default=False, help='Interactive mode.')
-    required_arguments = parser.add_argument_group('required arguments')
-    required_arguments.add_argument('-i', '--instructions', type=str, action='store', default=False, required=True,
-                                    help='Instructions, as JSON file')
-    required_arguments.add_argument('-t', '--tape', type=str, action='store', default=False, required=True,
-                                    help='Input tape')
+    required_args = parser.add_argument_group('required arguments')
+    required_args.add_argument('-i', '--instructions', type=str, action='store', default=False, required=True, help='Instructions, as JSON file')
+    required_args.add_argument('-t', '--tape', type=str, action='store', default=False, required=True, help='Input tape')
     return parser.parse_args()
 
 
@@ -38,30 +36,26 @@ class TuringMachine(object):
         self.validate_instruction(self.instructions, self.end_state)
 
     def run(self):
-        index = 0
+        tape_index = 0
         steps_counter = 0
-        self.render(index, steps_counter, render_override=True)
+        self.render(tape_index, steps_counter, render_override=True)
         while self.state != self.end_state:
-            index, steps_counter = self.calculate_next_state(index, steps_counter)
-            self.render(index, steps_counter)
-        self.render(index, steps_counter, render_override=True)
+            steps_counter += 1
+            tape_index = self.calculate_next_state(tape_index)
+            self.render(tape_index, steps_counter)
+        self.render(tape_index, steps_counter, render_override=True)
         return list_to_string(remove_empty_character(self.tape))
 
-    def calculate_next_state(self, index, steps_counter):
+    def calculate_next_state(self, index):
         if index == -1:
             self.tape.insert(0, Config.empty_character())
             index = 0
         if index == len(self.tape):
             self.tape.append(Config.empty_character())
-        steps_counter += 1
         cell = self.tape[index]
         action = self.instructions[self.state][cell]
-        self.tape[index], self.state, index = (
-            action['write'],
-            action['nextState'],
-            get_next_index(index, action['move'])
-        )
-        return index, steps_counter
+        self.tape[index], self.state, index = (action['write'], action['nextState'], next_index(index, action['move']))
+        return index
 
     def render(self, index, steps_counter, render_override=False):
         if self.should_render(render_override):
@@ -106,11 +100,14 @@ class TuringMachine(object):
 
     def print_render_mode_information(self):
         print('Render Mode')
+
         text_for_automatic_mode = 'X' if self.activate_render and not self.activate_interactive else ' '
-        text_for_interactive_mode = (('X', '(Press enter to render next step...)')
-                                     if self.activate_interactive else (' ', ' '))
-        text_for_none_mode = (('X', '(Please wait for results...)')
-                              if not self.activate_interactive and not self.activate_render else (' ', ' '))
+        show_for_interactive_mode = ('X', '(Press enter to render next step...)')
+        text_for_interactive_mode = (show_for_interactive_mode if self.activate_interactive else (' ', ' '))
+        none_render_activated = not self.activate_interactive and not self.activate_render
+        show_for_none_mode = ('X', '(Please wait for results...)')
+        text_for_none_mode = (show_for_none_mode if none_render_activated else (' ', ' '))
+
         print('[{}] Automatic'.format(text_for_automatic_mode))
         print('[{}] Interactive {}'.format(text_for_interactive_mode[0], text_for_interactive_mode[1]))
         print('[{}] None {}'.format(text_for_none_mode[0], text_for_none_mode[1]))

@@ -9,7 +9,7 @@ def pipeify(string):
     return '|'.join(string[i:i + 1] for i in range(0, len(string)))
 
 
-def get_next_index(index, direction):
+def next_index(index, direction):
     return index + Config.tape_movement_for(direction) if direction in Config.allowed_tape_movements() else index
 
 
