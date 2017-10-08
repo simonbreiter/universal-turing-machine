@@ -7,9 +7,7 @@ import argparse
 import time
 import os
 
-ALLOWED_TAPE_MOVEMENTS = {'right': 1, 'left': -1}
-EMPTY_CHARACTER = ' '
-VISIBLE_TAPE_LENGTH = 20
+from config import Config
 
 
 def parse_arguments():
@@ -52,10 +50,10 @@ class TuringMachine(object):
 
         while self.state != self.end_state:
             if index == -1:
-                self.tape.insert(0, EMPTY_CHARACTER)
+                self.tape.insert(0, Config.empty_character())
                 index = 0
             if index == len(self.tape):
-                self.tape.append(EMPTY_CHARACTER)
+                self.tape.append(Config.empty_character())
 
             steps_counter += 1
             cell = self.tape[index]
@@ -75,10 +73,10 @@ class TuringMachine(object):
     def render(self, index, steps_counter, render_override=False):
         if self.activate_render or self.activate_interactive or render_override:
             length = len(self.tape)
-            padding_start = VISIBLE_TAPE_LENGTH - index
-            padding_end = VISIBLE_TAPE_LENGTH - (length - (index + 1))
-            dynamic_start = index - VISIBLE_TAPE_LENGTH if index >= VISIBLE_TAPE_LENGTH else 0
-            dynamic_end = length - (length - index - VISIBLE_TAPE_LENGTH) if length - index > VISIBLE_TAPE_LENGTH else length
+            padding_start = Config.visible_tape_length() - index
+            padding_end = Config.visible_tape_length() - (length - (index + 1))
+            dynamic_start = index - Config.visible_tape_length() if index >= Config.visible_tape_length() else 0
+            dynamic_end = length - (length - index - Config.visible_tape_length()) if length - index > Config.visible_tape_length() else length
             os.system('clear')
             print('Steps Counter {}'.format(str(steps_counter).rjust(7)))
             print('Current State {}'.format(self.state.rjust(7)))
@@ -87,9 +85,9 @@ class TuringMachine(object):
             print('[{}] Automatic'.format('X' if self.activate_render and not self.activate_interactive else ' '))
             print('[{}] Interactive (Press enter to render next step...)'.format('X' if self.activate_interactive else ' '))
             print('[{}] None (Please wait for results...)'.format('X' if not self.activate_interactive and not self.activate_render else ' '))
-            print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
+            print(Config.visible_tape_length() * 2 * '=' + '▼' + Config.visible_tape_length() * 2 * '=')
             print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)[dynamic_start:dynamic_end] + padding_end * ' '))
-            print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▲' + VISIBLE_TAPE_LENGTH * 2 * '=')
+            print(Config.visible_tape_length() * 2 * '=' + '▲' + Config.visible_tape_length() * 2 * '=')
             print('Character Counter')
             for character, occurrence in self.get_character_occurrences(self.tape).items():
                 print('{}x: {}'.format(occurrence, character))
@@ -114,7 +112,7 @@ class TuringMachine(object):
                 action = instructions[instruction][case]
                 if len(action['write']) != 1:
                     raise Exception('Invalid config! Use ONE character, instead of "{}"!'.format(action['write']))
-                if action['move'] not in ALLOWED_TAPE_MOVEMENTS.keys():
+                if action['move'] not in Config.allowed_tape_movements():
                     raise Exception('Invalid config! Use "right" or "left", not "{}"!'.format(action['move']))
                 if action['nextState'] not in instructions and action['nextState'] != end_state:
                     raise Exception('Invalid config! State "{}" needs to be defined!'.format(action['nextState']))
@@ -129,11 +127,11 @@ class TuringMachine(object):
 
     @staticmethod
     def get_next_index(index, direction):
-        return index + ALLOWED_TAPE_MOVEMENTS[direction] if direction in ALLOWED_TAPE_MOVEMENTS.keys() else index
+        return index + Config.tape_movement_for(direction) if direction in Config.allowed_tape_movements() else index
 
     @staticmethod
     def remove_empty_character(dirty_list):
-        return [character for character in dirty_list if character != EMPTY_CHARACTER]
+        return [character for character in dirty_list if character != Config.empty_character()]
 
 
 def main():
