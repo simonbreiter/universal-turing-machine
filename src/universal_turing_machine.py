@@ -8,7 +8,7 @@ import time
 import os
 
 from config import Config
-from utils import get_next_index, list_to_string, remove_empty_character, insert_pipes_between_characters
+from utils import get_next_index, list_to_string, remove_empty_character, pipeify, count_occurrences
 
 
 def parse_arguments():
@@ -19,8 +19,10 @@ def parse_arguments():
     parser.add_argument('-r', '--render', action='store_true', default=False, help='Render turing machine')
     parser.add_argument('-a', '--interactive', action='store_true', default=False, help='Interactive mode.')
     required_arguments = parser.add_argument_group('required arguments')
-    required_arguments.add_argument('-i', '--instructions', type=str, action='store', default=False, required=True, help='Instructions, as JSON file')
-    required_arguments.add_argument('-t', '--tape', type=str, action='store', default=False, required=True, help='Input tape')
+    required_arguments.add_argument('-i', '--instructions', type=str, action='store', default=False, required=True,
+                                    help='Instructions, as JSON file')
+    required_arguments.add_argument('-t', '--tape', type=str, action='store', default=False, required=True,
+                                    help='Input tape')
     return parser.parse_args()
 
 
@@ -36,70 +38,87 @@ class TuringMachine(object):
         self.validate_instruction(self.instructions, self.end_state)
 
     def run(self):
-        steps_counter = 0
         index = 0
-
+        steps_counter = 0
         self.render(index, steps_counter, render_override=True)
-
         while self.state != self.end_state:
-            if index == -1:
-                self.tape.insert(0, Config.empty_character())
-                index = 0
-            if index == len(self.tape):
-                self.tape.append(Config.empty_character())
-
-            steps_counter += 1
-            cell = self.tape[index]
-            action = self.instructions[self.state][cell]
-
-            self.tape[index], self.state, index = (
-                action['write'],
-                action['nextState'],
-                get_next_index(index, action['move'])
-            )
-
+            index, steps_counter = self.calculate_next_state(index, steps_counter)
             self.render(index, steps_counter)
-
         self.render(index, steps_counter, render_override=True)
         return list_to_string(remove_empty_character(self.tape))
 
+    def calculate_next_state(self, index, steps_counter):
+        if index == -1:
+            self.tape.insert(0, Config.empty_character())
+            index = 0
+        if index == len(self.tape):
+            self.tape.append(Config.empty_character())
+        steps_counter += 1
+        cell = self.tape[index]
+        action = self.instructions[self.state][cell]
+        self.tape[index], self.state, index = (
+            action['write'],
+            action['nextState'],
+            get_next_index(index, action['move'])
+        )
+        return index, steps_counter
+
     def render(self, index, steps_counter, render_override=False):
-        if self.activate_render or self.activate_interactive or render_override:
-            length = len(self.tape)
-            padding_start = Config.visible_tape_length() - index
-            padding_end = Config.visible_tape_length() - (length - (index + 1))
-            dynamic_start = index - Config.visible_tape_length() if index >= Config.visible_tape_length() else 0
-            dynamic_end = length - (
-            length - index - Config.visible_tape_length()) if length - index > Config.visible_tape_length() else length
-            os.system('clear')
-            print('Steps Counter {}'.format(str(steps_counter).rjust(7)))
-            print('Current State {}'.format(self.state.rjust(7)))
-            print('Tape Index {} '.format(str(index).rjust(10)))
-            print('Render Mode')
-            print('[{}] Automatic'.format('X' if self.activate_render and not self.activate_interactive else ' '))
-            print('[{}] Interactive (Press enter to render next step...)'.format(
-                'X' if self.activate_interactive else ' '))
-            print('[{}] None (Please wait for results...)'.format(
-                'X' if not self.activate_interactive and not self.activate_render else ' '))
-            print(Config.visible_tape_length() * 2 * '=' + '▼' + Config.visible_tape_length() * 2 * '=')
-            print(insert_pipes_between_characters(padding_start * ' ' + list_to_string(self.tape)[dynamic_start:dynamic_end] + padding_end * ' '))
-            print(Config.visible_tape_length() * 2 * '=' + '▲' + Config.visible_tape_length() * 2 * '=')
-            print('Character Counter')
-            for character, occurrence in self.get_character_occurrences(self.tape).items():
-                print('{}x: {}'.format(occurrence, character))
-            print()
+        if self.should_render(render_override):
+            empty, padding_end, padding_start, visible_length, visible_tape_section = self.tape_format_calc(index)
+            self.print_system_clear()
+            self.print_statistics(index, steps_counter)
+            self.print_render_mode_information()
+            self.print_tape(empty, padding_end, padding_start, visible_length, visible_tape_section)
+            self.print_sign_occurrences()
             if self.activate_interactive:
                 input()
             if self.speed:
                 time.sleep(self.speed)
 
-    @staticmethod
-    def get_character_occurrences(tape):
-        clean_tape = remove_empty_character(tape)
-        occurrences = {character: 0 for character in clean_tape}
-        for character in clean_tape:
-            occurrences[character] += 1
-        return occurrences
+    def should_render(self, render_override):
+        return self.activate_render or self.activate_interactive or render_override
+
+    def print_system_clear(self):
+        os.system('clear')
+
+    def tape_format_calc(self, index):
+        length = len(self.tape)
+        visible_length = Config.visible_tape_length()
+        empty = Config.empty_character()
+        padding_start = visible_length - index
+        padding_end = visible_length - (length - (index + 1))
+        dynamic_start = index - visible_length if index >= visible_length else 0
+        dynamic_end = length - (length - index - visible_length) if length - index > visible_length else length
+        visible_tape_section = list_to_string(self.tape)[dynamic_start:dynamic_end]
+        return empty, padding_end, padding_start, visible_length, visible_tape_section
+
+    def print_sign_occurrences(self):
+        print('Character Counter')
+        for character, occurrence in count_occurrences(self.tape).items():
+            print('{}x: {}'.format(occurrence, character))
+        print()
+
+    def print_tape(self, empty, padding_end, padding_start, visible_length, visible_tape_section):
+        print(visible_length * 2 * '=' + '▼' + visible_length * 2 * '=')
+        print(pipeify(padding_start * empty + visible_tape_section + padding_end * empty))
+        print(visible_length * 2 * '=' + '▲' + visible_length * 2 * '=')
+
+    def print_render_mode_information(self):
+        print('Render Mode')
+        text_for_automatic_mode = 'X' if self.activate_render and not self.activate_interactive else ' '
+        text_for_interactive_mode = (('X', '(Press enter to render next step...)')
+                                     if self.activate_interactive else (' ', ' '))
+        text_for_none_mode = (('X', '(Please wait for results...)')
+                              if not self.activate_interactive and not self.activate_render else (' ', ' '))
+        print('[{}] Automatic'.format(text_for_automatic_mode))
+        print('[{}] Interactive {}'.format(text_for_interactive_mode[0], text_for_interactive_mode[1]))
+        print('[{}] None {}'.format(text_for_none_mode[0], text_for_none_mode[1]))
+
+    def print_statistics(self, index, steps_counter):
+        print('Steps Counter {}'.format(str(steps_counter).rjust(7)))
+        print('Current State {}'.format(self.state.rjust(7)))
+        print('Tape Index {} '.format(str(index).rjust(10)))
 
     @staticmethod
     def validate_instruction(instructions, end_state):

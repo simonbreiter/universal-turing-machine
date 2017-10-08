@@ -5,7 +5,7 @@ def list_to_string(to_stringify):
     return str.join('', to_stringify)
 
 
-def insert_pipes_between_characters(string):
+def pipeify(string):
     return '|'.join(string[i:i + 1] for i in range(0, len(string)))
 
 
@@ -15,3 +15,11 @@ def get_next_index(index, direction):
 
 def remove_empty_character(dirty_list):
     return [character for character in dirty_list if character != Config.empty_character()]
+
+
+def count_occurrences(in_list):
+    clean_list = remove_empty_character(in_list)
+    occurrences = {character: 0 for character in clean_list}
+    for character in clean_list:
+        occurrences[character] += 1
+    return occurrences
