@@ -9,10 +9,30 @@ The machine reads a JSON file as instruction and processes the input accordingly
 
 ```sh
 # Multiplication
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json --input "00 000" -r -s .01
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json --input "00000000000000000" -r -s .01
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json --input "0000000000000000000000000 0" -r -s .01
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
+
+# 2 * 3
+src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+    --tape "00 000" \
+    --render \
+    --speed 0.01
+  
+# 17 * 0
+src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+    --tape "00000000000000000" \
+    --render \
+    --speed 0.01
+
+# 25 * 1
+src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+    --tape "0000000000000000000000000 0" \
+    --render \
+    --speed 0.01
+
+# 13 * 24
+src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+    --tape "0000000000000 000000000000000000000000" \
+    --render \
+    --speed 0.01
 ```
 
 ## JSON Definition
@@ -86,7 +106,12 @@ If q1 detects a one it will write a zero at its position, move to the left and s
 Try it yourself!
 
 ```bash
-src/universal_turing_machine.py --instructions assets/instructions/readme_example.json -b q0 -e qdone --input " " -r -s 1
+src/universal_turing_machine.py --instructions assets/instructions/readme_example.json \
+    --begin q0 \
+    --end qdone \
+    --tape " " \
+    --render \
+    --speed 1
 ```
 
 ## Author(s)
