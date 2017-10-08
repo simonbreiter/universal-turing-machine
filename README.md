@@ -1,6 +1,6 @@
 # Universal Turing Machine
 
-Implementation of an universal turing machine in python.
+A universal Turing machine (UTM) implementation in Python.
 
 ![Turing Machine Example](assets/turing.png)
 
@@ -44,7 +44,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 ### Structure Legend
 
 * state-name: Any state name, usually q0, q1, etc.
-* character-action: Define action if Turing Machine reads this character
+* character-action: Define action if Turing machine reads this character
 * character-to-write: ONE character to write at current index
 * right|left: Which direction to move
 * next-state-name: The state to use next
