@@ -94,9 +94,10 @@ class TuringMachine(object):
             print('{}x: {}'.format(occurrence, character))
 
     def print_tape(self, empty, padding_end, padding_start, visible_length, visible_tape_section):
-        print(visible_length * 2 * '=' + '▼' + visible_length * 2 * '=')
+        padding_icons = visible_length * 2 * '='
+        print(padding_icons + '▼' + padding_icons)
         print(pipeify(padding_start * empty + visible_tape_section + padding_end * empty))
-        print(visible_length * 2 * '=' + '▲' + visible_length * 2 * '=')
+        print(padding_icons + '▲' + padding_icons)
 
     def print_render_mode_information(self):
         print('Render Mode')
