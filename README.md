@@ -55,7 +55,7 @@ src/universal_turing_machine.py --instructions assets/instructions/multiplicatio
         "<character-action>": {
             "write": "<character-to-write>",
             "move": "<right|left>",
-          	"nextState": "<next-state-name>"
+            "nextState": "<next-state-name>"
         }
     }
 }
@@ -77,7 +77,7 @@ src/universal_turing_machine.py --instructions assets/instructions/multiplicatio
         " ": {
             "write": "1",
             "move": "right",
-          	"nextState": "q1"
+            "nextState": "q1"
         }
     },
     "q1": {
