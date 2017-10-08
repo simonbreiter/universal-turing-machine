@@ -2,17 +2,17 @@
 
 A universal Turing machine (UTM) implementation in Python.
 
-![Turing Machine Example](assets/turing.png)
+![Turing Machine Example](assets/img/turing.png)
 
 ## Usage
 The machine reads a JSON file as instruction and processes the input accordingly.
 
 ```sh
 # Multiplication
-./turingmachine.py --instructions assets/multiplication.json --input "00 000" -r -s .01
-./turingmachine.py --instructions assets/multiplication.json --input "00000000000000000" -r -s .01
-./turingmachine.py --instructions assets/multiplication.json --input "0000000000000000000000000 0" -r -s .01
-./turingmachine.py --instructions assets/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
+./turingmachine.py --instructions assets/instructions/multiplication.json --input "00 000" -r -s .01
+./turingmachine.py --instructions assets/instructions/multiplication.json --input "00000000000000000" -r -s .01
+./turingmachine.py --instructions assets/instructions/multiplication.json --input "0000000000000000000000000 0" -r -s .01
+./turingmachine.py --instructions assets/instructions/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
 ```
 
 ## JSON Definition
@@ -86,7 +86,7 @@ If q1 detects a one it will write a zero at its position, move to the left and s
 Try it yourself!
 
 ```bash
-./turingmachine.py --instructions assets/readme_example.json -b q0 -e qdone --input " " -r -s 1
+./turingmachine.py --instructions assets/instructions/readme_example.json -b q0 -e qdone --input " " -r -s 1
 ```
 
 ## Author(s)

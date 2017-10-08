@@ -85,7 +85,7 @@ class TuringMachine(object):
             print('Tape Index {} '.format(str(index).rjust(10)))
             print('Render Mode')
             print('[{}] Automatic'.format('X' if self.activate_render and not self.activate_interactive else ' '))
-            print('[{}] Interactive (Press any key to render next step...)'.format('X' if self.activate_interactive else ' '))
+            print('[{}] Interactive (Press enter to render next step...)'.format('X' if self.activate_interactive else ' '))
             print('[{}] None (Please wait for results...)'.format('X' if not self.activate_interactive and not self.activate_render else ' '))
             print(VISIBLE_TAPE_LENGTH * 2 * '=' + '▼' + VISIBLE_TAPE_LENGTH * 2 * '=')
             print(self.insert_pipes_between_characters(padding_start * ' ' + self.list_to_string(self.tape)[dynamic_start:dynamic_end] + padding_end * ' '))
