@@ -27,7 +27,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 - Which direction the tape should move (right or left)
 - What state the machine should switch to (any state as defined in the JSON)
 
-### JSON Structure
+### Structure
 
 ```json
 {
@@ -41,7 +41,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 }
 ```
 
-### JSON Structure Legend
+### Structure Legend
 
 * state-name: Any state name, usually q0, q1, etc.
 * character-action: Define action if Turing Machine reads this character
@@ -49,7 +49,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 * right|left: Which direction to move
 * next-state-name: The state to use next
 
-### JSON Example
+### Example
 
 ```json
 {
@@ -75,13 +75,13 @@ The machine reads a JSON file as instruction and processes the input accordingly
 }
 ```
 
-### JSON Example Explanation
+### Example Explanation
 
 Assumptions: Initial state is q0 and end state is q1 (can be defined via program arguments)
 
-If q0 detects an empty character it will write a one at its position, move to the right and switch to state q1.
-If q1 detects an empty character it will write a zero at its position, move to the left and switch to state q1.
-If q1 detects a one it will write a zero at its position, move to the left and switch to state qdone.
+If q0 detects an empty character it will write a one at its position, move to the right and switch to state q1.  
+If q1 detects an empty character it will write a zero at its position, move to the left and switch to state q1.  
+If q1 detects a one it will write a zero at its position, move to the left and switch to state qdone.  
 
 Try it yourself!
 
