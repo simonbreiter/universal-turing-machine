@@ -38,27 +38,28 @@ class TuringMachine(object):
     def run(self):
         tape_index = 0
         steps_counter = 0
-        self.render(tape_index, steps_counter, render_override=True)
+        self.render(tape_index, steps_counter, force_render=True)
         while self.state != self.end_state:
             steps_counter += 1
             tape_index = self.calculate_next_state(tape_index)
             self.render(tape_index, steps_counter)
-        self.render(tape_index, steps_counter, render_override=True)
+        self.render(tape_index, steps_counter, force_render=True)
         return list_to_string(remove_empty_character(self.tape))
 
-    def calculate_next_state(self, index):
-        if index == -1:
+    def calculate_next_state(self, tape_index):
+        if tape_index == -1:
             self.tape.insert(0, Config.empty_character())
-            index = 0
-        if index == len(self.tape):
+            tape_index = 0
+        if tape_index == len(self.tape):
             self.tape.append(Config.empty_character())
-        cell = self.tape[index]
-        action = self.instructions[self.state][cell]
-        self.tape[index], self.state, index = (action['write'], action['nextState'], next_index(index, action['move']))
-        return index
+        action_for_current_state_and_cell = self.instructions[self.state][self.tape[tape_index]]
+        self.tape[tape_index] = action_for_current_state_and_cell['write']
+        self.state = action_for_current_state_and_cell['nextState']
+        tape_index = next_index(tape_index, action_for_current_state_and_cell['move'])
+        return tape_index
 
-    def render(self, index, steps_counter, render_override=False):
-        if self.should_render(render_override):
+    def render(self, index, steps_counter, force_render=False):
+        if self.should_render(force_render):
             empty, padding_end, padding_start, visible_length, visible_tape_section = self.tape_format_calc(index)
             self.print_system_clear()
             self.print_statistics(index, steps_counter)
@@ -70,8 +71,8 @@ class TuringMachine(object):
             if self.speed:
                 time.sleep(self.speed)
 
-    def should_render(self, render_override):
-        return self.activate_render or self.activate_interactive or render_override
+    def should_render(self, force_render):
+        return self.activate_render or self.activate_interactive or force_render
 
     def print_system_clear(self):
         os.system('clear')
@@ -91,7 +92,6 @@ class TuringMachine(object):
         print('Character Counter')
         for character, occurrence in count_occurrences(self.tape).items():
             print('{}x: {}'.format(occurrence, character))
-        print()
 
     def print_tape(self, empty, padding_end, padding_start, visible_length, visible_tape_section):
         print(visible_length * 2 * '=' + '▼' + visible_length * 2 * '=')
@@ -100,14 +100,12 @@ class TuringMachine(object):
 
     def print_render_mode_information(self):
         print('Render Mode')
-
         text_for_automatic_mode = 'X' if self.activate_render and not self.activate_interactive else ' '
         show_for_interactive_mode = ('X', '(Press enter to render next step...)')
         text_for_interactive_mode = (show_for_interactive_mode if self.activate_interactive else (' ', ' '))
         none_render_activated = not self.activate_interactive and not self.activate_render
         show_for_none_mode = ('X', '(Please wait for results...)')
         text_for_none_mode = (show_for_none_mode if none_render_activated else (' ', ' '))
-
         print('[{}] Automatic'.format(text_for_automatic_mode))
         print('[{}] Interactive {}'.format(text_for_interactive_mode[0], text_for_interactive_mode[1]))
         print('[{}] None {}'.format(text_for_none_mode[0], text_for_none_mode[1]))
@@ -141,6 +139,7 @@ def main():
                                args.render,
                                args.speed,
                                args.interactive).run()
+        print()
         print('Input: {}'.format(args.tape))
         print('Output: {}'.format(result))
     except Exception as e:
