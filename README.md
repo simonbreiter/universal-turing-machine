@@ -15,19 +15,19 @@ The machine reads a JSON file as instruction and processes the input accordingly
 ./turingmachine.py --instructions assets/multiplication.json --input "0000000000000 000000000000000000000000" -r -s .01
 ```
 
-## JSON Encoding
+## JSON Definition
 
-### Interpretation
+### How it works
 
 1. The JSON is read and converted into a Python dict containing all possible states and instructions.
 2. The Python dict is validated and an exception is thrown, should the definition contain any errors (i.e. a state is referenced but never defined).
-3. The Python dict is used ad-hoc to find out (depending on the current state and the character at the current index of the Turing Machine):
+3. The Python dict is used ad-hoc to find out the following:
 
 - What should be written on the tape (can be any character)
 - Which direction the tape should move (right or left)
 - What state the machine should switch to (any state as defined in the JSON)
 
-### Structure
+### JSON Structure
 
 ```json
 {
@@ -41,15 +41,15 @@ The machine reads a JSON file as instruction and processes the input accordingly
 }
 ```
 
-#### Legend
+### JSON Structure Legend
 
-* "<state-name>": Any state name, usually q0, q1, etc.
-* "<character-action>": Define action if Turing Machine reads this character
-* "<character-to-write>": ONE character to write at current index
-* "<right|left>": Which direction to move
-* "<next-state-name>": The state name to switch to next
+* state-name: Any state name, usually q0, q1, etc.
+* character-action: Define action if Turing Machine reads this character
+* character-to-write: ONE character to write at current index
+* right|left: Which direction to move
+* next-state-name: The state to use next
 
-### Example
+### JSON Example
 
 ```json
 {
@@ -75,7 +75,7 @@ The machine reads a JSON file as instruction and processes the input accordingly
 }
 ```
 
-#### Explanation
+### JSON Example Explanation
 
 Assumptions: Initial state is q0 and end state is q1 (can be defined via program arguments)
 
