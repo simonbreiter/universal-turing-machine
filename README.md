@@ -121,16 +121,20 @@ src/universal_turing_machine.py --instructions assets/instructions/readme_exampl
 The configuration `universal.json` allows you to input any other configuration directly on the tape.
 
 ### About the machine
+
 The machine uses one tape where you need to put the configuration of your machine and the inputs for your machine. Input consists only of (0,1,' ')\* where the universal machine itself does use internally (0,1,a,b,c,d,e,' ',x,#)\*. This is mostly due to simplicity, the alpahbet could 'easily' be reduced to (0,1)\*.
 
 ### Restrictions
-1. Your machine should not move more to the left then the initial input was. Otherwise you will overwrite your own configuraion what is not somethingyou want to do!
-    - this could be fixed by changing the configuration of universal.json to shift the output right if you get to close to the configuration.
-    - another fix would be to add a second tape, where only the input of your machine is on. (This is a very common way to implement the universal Turing Machine as it allows some more speed)
+
+1. Your machine should not move more to the left then the initial input was. Otherwise you will overwrite your own configuraion, which is not somethingyou you would want to do!
+    - This could be fixed by changing the configuration of `universal.json` to shift the output to the right if you get too close to the configuration.
+    - Another fix would be to add a second tape, which only contains the input of your machine. This is a very common way to implement the universal Turing machine as it allows for more speed.
 2. The machine is not foolproof. It's actually only tested with the following example and some very simple other machines.
 
 ### Configuration to put on the tape
-1. The input is designed as simple as possible. I assume you have named all your States with integers >=1 and the transitions look something like this:
+
+1. The input is designed to be as simple as possible. I assume you have named all your states with integers >=1 and the transitions look something like this:
+
 ```javascript
 "q1": {
     " ": {
@@ -147,6 +151,7 @@ The machine uses one tape where you need to put the configuration of your machin
 ```
 
 2. Split the config so you have every transition on it's own
+
 ```javascript
 "q1": {
     " ": {
@@ -163,6 +168,7 @@ The machine uses one tape where you need to put the configuration of your machin
     }
 }
 ```
+
 3. Convert all values to the following values:
         
     | Rule | Example |
