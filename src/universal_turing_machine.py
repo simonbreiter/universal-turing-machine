@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-import json
 import argparse
 
 import time
 import os
 
-from config import Config
-from utils import next_index, list_to_string, remove_empty_character, pipeify, count_occurrences
+from src.config import Config
+from src.utils import next_index, list_to_string, remove_empty_character, pipeify, count_occurrences
 
 
 def parse_arguments():
@@ -128,24 +127,3 @@ class TuringMachine(object):
                 if action['nextState'] not in instructions and action['nextState'] != end_state:
                     raise Exception('Invalid config! State "{}" needs to be defined!'.format(action['nextState']))
 
-
-def main():
-    args = parse_arguments()
-    try:
-        instructions = json.loads(open(args.instructions).read())
-        result = TuringMachine(instructions,
-                               args.tape,
-                               args.begin,
-                               args.end,
-                               args.render,
-                               args.speed,
-                               args.interactive).run()
-        print()
-        print('Input: {}'.format(args.tape))
-        print('Output: {}'.format(result))
-    except Exception as e:
-        print('Something went wrong! Issue: {}'.format(e))
-
-
-if __name__ == '__main__':
-    main()

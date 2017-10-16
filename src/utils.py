@@ -1,4 +1,4 @@
-from config import Config
+from src.config import Config
 
 
 def list_to_string(to_stringify):

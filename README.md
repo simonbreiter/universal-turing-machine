@@ -13,25 +13,25 @@ The machine reads a JSON file as instruction and processes the input accordingly
 # Multiplication
 
 # 2 * 3
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+./universal_turing_machine --instructions assets/instructions/multiplication.json \
     --tape "00 000" \
     --render \
     --speed 0.01
   
 # 17 * 0
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+./universal_turing_machine --instructions assets/instructions/multiplication.json \
     --tape "00000000000000000" \
     --render \
     --speed 0.01
 
 # 25 * 1
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+./universal_turing_machine --instructions assets/instructions/multiplication.json \
     --tape "0000000000000000000000000 0" \
     --render \
     --speed 0.01
 
 # 13 * 24
-src/universal_turing_machine.py --instructions assets/instructions/multiplication.json \
+./universal_turing_machine --instructions assets/instructions/multiplication.json \
     --tape "0000000000000 000000000000000000000000" \
     --render \
     --speed 0.01
@@ -108,7 +108,7 @@ If q1 detects a one it will write a zero at its position, move to the left and s
 Try it yourself!
 
 ```bash
-src/universal_turing_machine.py --instructions assets/instructions/readme_example.json \
+./universal_turing_machine --instructions assets/instructions/readme_example.json \
     --begin q0 \
     --end qdone \
     --tape " " \
@@ -208,7 +208,7 @@ The machine uses one tape where you need to put the configuration of your machin
 ## Multiplication Example Configuration for Universal Turing Machine
 
 ```bash
-src/universal_turing_machine.py --instructions assets/instructions/universal.json \
+./universal_turing_machine --instructions assets/instructions/universal.json \
     --tape "010001001000100110101000100010011001000100000000000000010001001100101000100010011000100010000100010011000101000101001100001000100000000000000001000101100001010000010001001100000100010000001000100110000010100000101001100000010001000000010101100000010100000010100110000000100010000000010001011000000010100000001010110000000010001000000000010101100000000101000000000101011000000000100010000101001100000000010100000000010101100000000001000100000000000100010110000000000101000000000010101100000000000100010000000000000100010011000000000001010000000000001010110000000000001000101000100110000000000001010000000000001010110000000000000100010000000000000100010011000000000000010100000000000000100010011000000000000001010000000000000010001001100000000000000010100000000000000010001001100000000000000001000100000000000000000100010110000000000000000101000000000000000010001011000000000000000001010000000000000000010001011100 00" \
     --begin q1 \
     --end q82 \
