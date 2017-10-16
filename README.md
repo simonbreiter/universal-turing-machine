@@ -214,7 +214,7 @@ src/universal_turing_machine.py --instructions assets/instructions/universal.jso
 
 [Simon Breiter](mailto:hello@simonbreiter.com)    
 [Emanuele Mazzotta](mailto:hello@mazzotta.me)  
-David Moser  
+Dave Moser  
 
 ## Credits
 [Swizec Teller](http://swizec.com/blog/a-turing-machine-in-133-bytes-of-javascript/swizec/3069)
