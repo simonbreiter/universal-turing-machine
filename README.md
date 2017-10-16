@@ -8,7 +8,7 @@ A universal Turing machine (UTM) implementation in Python.
 
 ## Video Example
 
-[![asciicast](https://asciinema.org/a/8W5NtwgDWm9oS0muFXu39kxWJ.png)](assets/img/video_example.gif)
+[![asciicast](https://asciinema.org/a/8W5NtwgDWm9oS0muFXu39kxWJ.png)](https://rawgit.com/simonbreiter/universal-turing-machine/assets/img/video_example.gif)
 
 ## Usage
 The machine reads a JSON file as instruction and processes the input accordingly.
