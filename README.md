@@ -1,6 +1,4 @@
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](LICENSE.md)
-
-# Universal Turing Machine
+# Universal Turing Machine [![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](LICENSE.md)
 
 A universal Turing machine (UTM) implementation in Python.
 
@@ -12,6 +10,20 @@ A universal Turing machine (UTM) implementation in Python.
 
 ## Usage
 The machine reads a JSON file as instruction and processes the input accordingly.
+
+### Docker
+
+Every command as shown below, can be run via Docker
+
+```sh
+# To use preincluded instructions (see assets folder)
+docker run -t emazzotta/universal-turing-machine ./universal_turing_machine <args>
+
+# To include your own instructions
+docker run -v <my_instructions_dir>:/app/assets/instructions -t emazzotta/universal-turing-machine ./universal_turing_machine <args>
+```
+
+### Examples 
 
 ```sh
 # Multiplication
@@ -226,5 +238,3 @@ The machine uses one tape where you need to put the configuration of your machin
 [Emanuele Mazzotta](mailto:hello@mazzotta.me)  
 Dave Moser  
 
-## Credits
-[Swizec Teller](http://swizec.com/blog/a-turing-machine-in-133-bytes-of-javascript/swizec/3069)
