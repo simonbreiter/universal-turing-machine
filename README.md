@@ -17,10 +17,10 @@ Every command as shown below, can be run via Docker
 
 ```sh
 # To use preincluded instructions (see assets folder)
-docker run -t emazzotta/universal-turing-machine ./universal_turing_machine <args>
+docker run -ti emazzotta/universal-turing-machine ./universal_turing_machine <args>
 
 # To include your own instructions
-docker run -v <my_instructions_dir>:/app/assets/instructions -t emazzotta/universal-turing-machine ./universal_turing_machine <args>
+docker run -v <my_instructions_dir>:/app/assets/instructions -ti emazzotta/universal-turing-machine ./universal_turing_machine <args>
 ```
 
 ### Examples 
