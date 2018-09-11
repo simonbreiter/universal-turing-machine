@@ -232,7 +232,7 @@ The machine uses one tape where you need to put the configuration of your machin
     --speed 0.01
 ```
 
-## Author(s)
+## Authors
 
 [Simon Breiter](mailto:hello@simonbreiter.com)    
 [Emanuele Mazzotta](mailto:hello@mazzotta.me)  
