@@ -1,4 +1,5 @@
 # Universal Turing Machine [![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](LICENSE.md)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsimonbreiter%2Funiversal-turing-machine.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsimonbreiter%2Funiversal-turing-machine?ref=badge_shield)
 
 A universal Turing machine (UTM) implementation in Python.
 
@@ -238,3 +239,7 @@ The machine uses one tape where you need to put the configuration of your machin
 [Emanuele Mazzotta](mailto:hello@mazzotta.me)  
 Dave Moser  
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsimonbreiter%2Funiversal-turing-machine.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsimonbreiter%2Funiversal-turing-machine?ref=badge_large)
